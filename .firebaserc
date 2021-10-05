@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "scrum-poker-b4e51"
+  },
+  "targets": {
+    "scrum-poker-b4e51": {
+      "hosting": {
+        "scrum-poker": [
+          "scrum-poker"
+        ]
+      }
+    }
+  }
+}

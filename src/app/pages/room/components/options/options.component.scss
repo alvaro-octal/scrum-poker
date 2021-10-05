@@ -1,0 +1,49 @@
+.card {
+    height: 80px;
+    width: 60px;
+    font-size: 30px;
+    position: relative;
+    animation: fadein 0.5s ease-out forwards;
+
+    &.option-selected {
+        animation: bounce 0.25s ease-out forwards;
+    }
+
+    &.fadeout {
+        animation: fadeout 0.25s ease-out forwards;
+    }
+}
+
+@keyframes fadein {
+    from {
+        top: 40px;
+        opacity: 0;
+    }
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        top: 0;
+        opacity: 1;
+    }
+    to {
+        top: 40px;
+        opacity: 0;
+    }
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}

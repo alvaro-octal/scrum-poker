@@ -1,0 +1,25 @@
+<div class="d-flex justify-content-center align-items-center h-100" *ngIf="room$ | async as room">
+    <div class="card" style="height: 75vh">
+        <div class="d-flex h-100">
+            <div class="flex-grow-1 p-2 h-100" style="background: rgba(0, 0, 0, 0.15)">
+                <app-round [room]="room" [id]="roundId" *ngIf="roundId"></app-round>
+            </div>
+            <div class="border-start">
+                <table class="table mb-0">
+                    <tbody>
+                        <tr *ngIf="session">
+                            <td class="table-light">
+                                <app-user-horizontal [user]="session"></app-user-horizontal>
+                            </td>
+                        </tr>
+                        <tr *ngFor="let user of users">
+                            <td>
+                                <app-user-horizontal [user]="user"></app-user-horizontal>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

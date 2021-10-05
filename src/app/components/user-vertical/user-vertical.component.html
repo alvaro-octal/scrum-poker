@@ -1,0 +1,35 @@
+<div *ngIf="user">
+  <div class="card">
+    <img
+      class="img-fluid m-1 rounded"
+      [src]="user.photoURL"
+      [alt]="user.displayName || 'UNKNOWN'"
+      *ngIf="user.photoURL"
+    /><span
+      class="
+        position-absolute
+        top-0
+        start-100
+        translate-middle
+        p-2
+        border border-light
+        rounded-circle
+      "
+      [ngClass]="{
+        'bg-success': presence.status === 'online',
+        'bg-warning': presence.status === 'away',
+        'bg-dark': presence.status === 'offline'
+      }"
+      *ngIf="presence$ | async as presence"
+    >
+      <span class="visually-hidden">{{ presence.status }}</span>
+    </span>
+    <div class="card-body text-center p-1">
+      <span class="user-name" *ngIf="user.displayName">
+        {{ user.displayName }}
+      </span>
+      <span class="text-black-50" *ngIf="!user.displayName">UNKNOWN</span>
+    </div>
+  </div>
+</div>
+<div *ngIf="!user">LOADING...</div>

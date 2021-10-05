@@ -1,0 +1,82 @@
+.vote {
+  display: block;
+  width: 60px;
+  height: 80px;
+  margin: 4px;
+  position: relative;
+  font-family: "Syne Mono", monospace;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+.vote.flipped {
+  .front {
+    transform: rotateY(180deg);
+  }
+  .back {
+    transform: rotateY(0deg);
+  }
+}
+.front,
+.back {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 5px silver);
+  border-radius: 12px;
+  backface-visibility: hidden;
+  transition: all 0.5s;
+}
+// back
+.back {
+  border: 3px solid #fff;
+  background: conic-gradient(
+    #ffcc33 25%,
+    #fff3ce 25%,
+    #fff3ce 25%,
+    #ffcc33 50%,
+    #ffcc33 75%,
+    #fff3ce 25%
+  );
+  background-size: 20px 20px;
+  transform: rotateY(-180deg);
+}
+// front with suit
+.front {
+  border: 3px solid #000;
+  background-color: #fff;
+  font-size: 24px;
+  .value {
+    font-size: 42px;
+  }
+}
+
+// main suit
+.main {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 5em;
+  color: transparent;
+  -webkit-background-clip: text;
+}
+
+.suit {
+  text-align: center;
+  position: absolute;
+  width: 20px;
+  font-size: 14px;
+
+  &.top {
+    top: 4px;
+    left: 4px;
+  }
+
+  &.bottom {
+    bottom: 4px;
+    right: 4px;
+    transform: rotate(180deg);
+  }
+}

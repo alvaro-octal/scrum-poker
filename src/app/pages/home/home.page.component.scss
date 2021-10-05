@@ -1,0 +1,14 @@
+.card {
+    animation: fadein 0.5s ease-out forwards;
+}
+
+@keyframes fadein {
+    from {
+        top: 40px;
+        opacity: 0;
+    }
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
