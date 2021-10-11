@@ -47,7 +47,6 @@ export class RoomService {
   }
 
   public async next(id: string): Promise<RoundCreationResult> {
-    console.log('NEXT!');
 
     const result: RoundCreationResult = await this.roundService.create();
 

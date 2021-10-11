@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { Auth, signInWithPopup } from '@angular/fire/auth';
-import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-login-page',
@@ -20,7 +19,7 @@ export class LoginPageComponent implements OnInit {
         'Not responsive!'
     ];
 
-    constructor(private router: Router, private auth: Auth) {
+    constructor(private auth: Auth) {
         this.message = this.messages[Math.floor(Math.random() * this.messages.length)];
     }
 
@@ -35,7 +34,6 @@ export class LoginPageComponent implements OnInit {
                 const credential = GoogleAuthProvider.credentialFromResult(result);
 
                 if (credential) {
-                    this.router.navigateByUrl('/');
                     const token = credential.accessToken;
                 } else {
                     console.error('No credential found!', credential);
@@ -53,8 +51,8 @@ export class LoginPageComponent implements OnInit {
                 const credential = GoogleAuthProvider.credentialFromError(error);
                 // ...
 
-                console.log(error);
-                console.log({
+                console.error(error);
+                console.debug({
                     code: errorCode,
                     message: errorMessage,
                     email: email,

@@ -50,16 +50,8 @@ export class RoomPageComponent implements OnInit {
             return;
           }
 
-          console.log({
-            room: room,
-          });
-
           const { key } = Helpers.destructureDocumentPath(room.round.path);
           this.roundId = key;
-
-          console.log({
-            roundId: this.roundId,
-          });
 
           const uid: string = this.session.uid;
 

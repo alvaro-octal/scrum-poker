@@ -11,11 +11,18 @@ import { Router } from '@angular/router';
 export class AppComponent {
     public id: string | undefined;
     public session: UserInterface | undefined;
+    public originalURL: string;
 
     constructor(private router: Router, private auth: Auth) {
+        this.originalURL = document.location.pathname;
+
         this.auth.onAuthStateChanged((user): void => {
             if (user) {
-                // this.router.navigateByUrl('/');
+                if (this.originalURL === '/login') {
+                    this.router.navigateByUrl('/');
+                } else if (this.originalURL.length > 1) {
+                    this.router.navigateByUrl(this.originalURL);
+                }
             } else {
                 this.router.navigateByUrl('/login');
             }
