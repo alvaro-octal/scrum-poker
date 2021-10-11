@@ -20,33 +20,35 @@ import { VoteComponent } from './pages/room/components/vote/vote.component';
 import { BoardComponent } from './pages/room/components/board/board.component';
 import { RoundComponent } from './pages/room/components/round/round.component';
 import { OptionsComponent } from './pages/room/components/options/options.component';
+import { OptionRendererPipe } from './pipes/option/option.renderer.pipe';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    UserVerticalComponent,
-    LoginPageComponent,
-    RoomPageComponent,
-    BoardComponent,
-    HomePageComponent,
-    UserHorizontalComponent,
-    VoteComponent,
-    BoardComponent,
-    RoundComponent,
-    OptionsComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideFirestore(() => getFirestore()),
-    provideDatabase(() => getDatabase()),
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireDatabaseModule,
-    provideAuth(() => getAuth()),
-    FormsModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        UserVerticalComponent,
+        LoginPageComponent,
+        RoomPageComponent,
+        BoardComponent,
+        HomePageComponent,
+        UserHorizontalComponent,
+        VoteComponent,
+        BoardComponent,
+        RoundComponent,
+        OptionsComponent,
+        OptionRendererPipe
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        provideFirebaseApp(() => initializeApp(environment.firebase)),
+        provideFirestore(() => getFirestore()),
+        provideDatabase(() => getDatabase()),
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFireDatabaseModule,
+        provideAuth(() => getAuth()),
+        FormsModule
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}

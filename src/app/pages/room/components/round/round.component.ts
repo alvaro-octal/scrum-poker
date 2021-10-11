@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { RoundInterface } from '../../../../interfaces/room/round/round.interface';
-import { VoteInterface } from '../../../../interfaces/room/round/vote/vote.interface';
+import { VoteInterface, VoteValue } from '../../../../interfaces/room/round/vote/vote.interface';
 import { RoomInterface } from '../../../../interfaces/room/room.interface';
 import { RoomService } from '../../../../services/room/room.service';
 import { RoundService } from '../../../../services/round/round.service';
@@ -20,7 +20,7 @@ export class RoundComponent implements OnInit {
     public stats: RoundStatsInterface | undefined;
     private _id: string | undefined;
 
-    public values: number[] = [0, 1, 2, 3, 5, 8, 13, 21, 34, 55];
+    public values: VoteValue[] = [0.5, 1, 2, 3, 5, 8, 13, 21, 34, 55, null];
 
     @Input() room: RoomInterface | undefined;
     @Input() set id(id: string) {
@@ -61,7 +61,7 @@ export class RoundComponent implements OnInit {
 
     ngOnInit(): void {}
 
-    public vote(round: RoundInterface, value: number): void {
+    public vote(round: RoundInterface, value: VoteValue): void {
         if (!this.session) {
             console.error('No session was found');
             return;
@@ -85,7 +85,15 @@ export class RoundComponent implements OnInit {
 
         const sum: number = values.reduce((a: number, b: number): number => a + b, 0);
         const avg: number = sum / values.length || 0;
-        const std: number = Math.sqrt(values.map((x) => Math.pow(x - avg, 2)).reduce((a, b) => a + b) / values.length);
+        let std: number = 0;
+
+        if (values.length > 0) {
+            Math.sqrt(
+                values
+                    .map((x: number): number => Math.pow(x - avg, 2))
+                    .reduce((a: number, b: number): number => a + b) / values.length
+            );
+        }
 
         this.stats = {
             count: values.length,

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { VoteValue } from '../../../../interfaces/room/round/vote/vote.interface';
 
 @Component({
     selector: 'app-options',
@@ -7,10 +8,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class OptionsComponent implements OnInit {
     public fadeout: boolean = false;
-    public optionSelected: number | undefined;
-    public options: number[] | undefined;
+    public optionSelected: VoteValue | undefined;
+    public options: VoteValue[] | undefined;
 
-    @Input() set values(values: number[] | undefined) {
+    @Input() set values(values: VoteValue[] | undefined) {
         this.options = [];
 
         if (!values) {
@@ -23,12 +24,24 @@ export class OptionsComponent implements OnInit {
             }, 25 * index);
         }
     }
-    @Output() selected = new EventEmitter<number>();
-    constructor() {}
+    @Output() selected = new EventEmitter<VoteValue>();
+    constructor() {
+        document.addEventListener(
+            'keydown',
+            (event: KeyboardEvent): void => {
+                const index: number = Number(event.key);
+
+                if (!Number.isNaN(index) && this.options && this.options[index] !== undefined) {
+                    this.fadeoutAndEmit(this.options[index]);
+                }
+            },
+            false
+        );
+    }
 
     ngOnInit(): void {}
 
-    public onOptionSelected(value: number): void {
+    public onOptionSelected(value: VoteValue): void {
         if (this.optionSelected) {
             return;
         }
@@ -39,7 +52,7 @@ export class OptionsComponent implements OnInit {
         }, 250);
     }
 
-    private fadeoutAndEmit(value: number): void {
+    private fadeoutAndEmit(value: VoteValue): void {
         this.fadeout = true;
         setTimeout((): void => {
             this.selected.emit(value);

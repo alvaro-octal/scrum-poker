@@ -14,11 +14,10 @@ export class LoginPageComponent implements OnInit {
         'Now with money',
         'Such code, WOW',
         'Esto no sirve para nada',
-        'Esto es todo JS',
-        'Esto no es serio',
-        'Antes todo esto era campo',
         'Happy coding :)',
-        'API v2, próximamente'
+        'API v2, próximamente',
+        'Releasing on time',
+        'Not responsive!'
     ];
 
     constructor(private router: Router, private auth: Auth) {

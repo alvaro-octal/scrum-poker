@@ -4,11 +4,12 @@
         [class.option-selected]="optionSelected === option"
         [class.fadeout]="fadeout"
         (click)="onOptionSelected(option)"
-        *ngFor="let option of options"
+        *ngFor="let option of options; let index = index"
     >
+        <span class="card-tip" *ngIf="index <= 9">({{ index }})</span>
         <div class="card-body d-flex align-items-center justify-content-center p-2">
             <span class="font-monospace">
-                {{ option }}
+                {{ option | optionRenderer }}
             </span>
         </div>
     </div>

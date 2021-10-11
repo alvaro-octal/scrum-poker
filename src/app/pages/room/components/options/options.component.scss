@@ -12,6 +12,13 @@
     &.fadeout {
         animation: fadeout 0.25s ease-out forwards;
     }
+
+    > .card-tip {
+        position: absolute;
+        top: 1px;
+        right: 5px;
+        font-size: 12px;
+    }
 }
 
 @keyframes fadein {

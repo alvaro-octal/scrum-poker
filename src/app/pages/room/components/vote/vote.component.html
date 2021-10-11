@@ -1,8 +1,8 @@
 <div class="vote" [class.flipped]="flipped" *ngIf="vote">
-  <div class="back"></div>
-  <div class="front d-flex justify-content-center align-items-center">
-    <div class="value">{{ vote.value }}</div>
-    <div class="suit top" *ngIf="initials">{{ initials }}</div>
-    <div class="suit bottom" *ngIf="initials">{{ initials }}</div>
-  </div>
+    <div class="back"></div>
+    <div class="front d-flex justify-content-center align-items-center">
+        <div class="value">{{ vote.value | optionRenderer }}</div>
+        <div class="suit top" *ngIf="initials">{{ initials }}</div>
+        <div class="suit bottom" *ngIf="initials">{{ initials }}</div>
+    </div>
 </div>
