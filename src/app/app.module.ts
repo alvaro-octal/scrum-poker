@@ -21,6 +21,7 @@ import { BoardComponent } from './pages/room/components/board/board.component';
 import { RoundComponent } from './pages/room/components/round/round.component';
 import { OptionsComponent } from './pages/room/components/options/options.component';
 import { OptionRendererPipe } from './pipes/option/option.renderer.pipe';
+import { PresenceComponent } from './pages/room/components/presence/presence.component';
 
 @NgModule({
     declarations: [
@@ -35,7 +36,8 @@ import { OptionRendererPipe } from './pipes/option/option.renderer.pipe';
         BoardComponent,
         RoundComponent,
         OptionsComponent,
-        OptionRendererPipe
+        OptionRendererPipe,
+        PresenceComponent
     ],
     imports: [
         BrowserModule,
