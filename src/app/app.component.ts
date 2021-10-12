@@ -18,10 +18,10 @@ export class AppComponent {
 
         this.auth.onAuthStateChanged((user): void => {
             if (user) {
-                if (this.originalURL === '/login') {
-                    this.router.navigateByUrl('/');
-                } else if (this.originalURL.length > 1) {
+                if (this.originalURL.startsWith('/room')) {
                     this.router.navigateByUrl(this.originalURL);
+                } else {
+                    this.router.navigateByUrl('/');
                 }
             } else {
                 this.router.navigateByUrl('/login');
