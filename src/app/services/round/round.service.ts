@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { RoundInterface } from '../../interfaces/room/round/round.interface';
 import { Observable } from 'rxjs';
 import { VoteValue } from '../../interfaces/room/round/vote/vote.interface';
+import { deleteField } from '@angular/fire/firestore';
 
 @Injectable({
     providedIn: 'root'
@@ -47,6 +48,13 @@ export class RoundService {
                 user: user,
                 created_at: new Date()
             }
+        });
+    }
+
+    deleteVote(id: string, user: UserInterface): void {
+        const document = this.firestore.doc<RoundInterface>(`rounds/${id}`);
+        document.update({
+            [`votes.${user.uid}`]: deleteField()
         });
     }
 

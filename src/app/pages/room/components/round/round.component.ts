@@ -40,6 +40,16 @@ export class RoundComponent implements OnInit {
                 console.error('Auth did not returned user');
             }
         });
+
+        document.addEventListener(
+            'keydown',
+            (event: KeyboardEvent): void => {
+                if (event.code === 'Escape') {
+                    this.deleteVote();
+                }
+            },
+            false
+        );
     }
 
     private refresh(id: string | undefined = this._id): void {
@@ -88,7 +98,7 @@ export class RoundComponent implements OnInit {
         let std: number = 0;
 
         if (values.length > 0) {
-            Math.sqrt(
+            std = Math.sqrt(
                 values
                     .map((x: number): number => Math.pow(x - avg, 2))
                     .reduce((a: number, b: number): number => a + b) / values.length
@@ -111,6 +121,18 @@ export class RoundComponent implements OnInit {
         this.stats = undefined;
 
         this.roomService.next(this.room.id);
+    }
+
+    public deleteVote(): void {
+        if (!this._id) {
+            console.error('Round Id was not provided');
+            return;
+        } else if (!this.session) {
+            console.error('No session was found');
+            return;
+        }
+
+        this.roundService.deleteVote(this._id, this.session);
     }
 }
 
