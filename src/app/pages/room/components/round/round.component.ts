@@ -19,6 +19,7 @@ export class RoundComponent implements OnInit {
     public session: UserInterface | undefined;
     public stats: RoundStatsInterface | undefined;
     private _id: string | undefined;
+    private _round: RoundInterface | undefined;
 
     public values: VoteValue[] = [0.5, 1, 2, 3, 5, 8, 13, 21, 34, 55, null];
 
@@ -45,7 +46,9 @@ export class RoundComponent implements OnInit {
             'keydown',
             (event: KeyboardEvent): void => {
                 if (event.code === 'Escape') {
-                    this.deleteVote();
+                    if (this._round && !this._round.resolved) {
+                        this.deleteVote();
+                    }
                 }
             },
             false
@@ -60,6 +63,7 @@ export class RoundComponent implements OnInit {
 
         this.round$ = this.roundService.get(id);
         this.round$.subscribe((round: RoundInterface): void => {
+            this._round = round;
             this.voted = round.votes.hasOwnProperty(this.session?.uid || '');
             if (round.resolved) {
                 this.calculateResults(round);
