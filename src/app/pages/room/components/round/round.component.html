@@ -1,11 +1,11 @@
 <div *ngIf="round$ | async as round" class="h-100">
     <!-- Board -->
 
-    <div class="board-container mb-2">
+    <div class="board-container">
         <app-board [id]="round.id"></app-board>
     </div>
 
-    <div class="footer-container">
+    <div class="footer-container mt-2">
         <!-- Cards -->
 
         <div class="d-flex justify-content-center flex-wrap" *ngIf="!voted && !stats">

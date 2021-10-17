@@ -7,6 +7,7 @@
     border: 1px solid rgba(0, 0, 0, 0.225);
     border-radius: 0.45rem;
     margin-right: 0.45rem;
+    box-shadow: 2px 2px 2px #aaa;
 
     &.option-selected {
         animation: bounce 0.25s ease-out forwards;
