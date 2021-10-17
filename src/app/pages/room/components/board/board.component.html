@@ -1,3 +1,4 @@
 <div class="board d-flex justify-content-center align-items-center h-100 w-100" *ngIf="round$ | async as round">
     <app-vote [vote]="vote" [flipped]="!round.resolved" *ngFor="let vote of votes"></app-vote>
+    <div *ngIf="!votes?.length" class="board-msg">Waiting for votes...</div>
 </div>

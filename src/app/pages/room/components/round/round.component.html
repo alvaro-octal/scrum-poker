@@ -8,13 +8,13 @@
     <div class="footer-container">
         <!-- Cards -->
 
-        <div class="d-flex align-self-end flex-wrap" *ngIf="!voted && !stats">
+        <div class="d-flex justify-content-center flex-wrap" *ngIf="!voted && !stats">
             <app-options [values]="values" (selected)="vote(round, $event)"></app-options>
         </div>
 
         <!-- Resolve or Wait -->
 
-        <div class="d-flex align-self-end h-100" *ngIf="voted && !stats">
+        <div class="d-flex justify-content-center h-100" *ngIf="voted && !stats">
             <div class="d-flex justify-content-center w-100">
                 <div class="align-self-center text-black-50" *ngIf="room?.owner?.uid !== session?.uid">
                     Waiting for resolution... press ESC to change your vote.
@@ -27,7 +27,7 @@
 
         <!-- Stats -->
 
-        <div class="d-flex align-self-end h-100" *ngIf="stats">
+        <div class="d-flex justify-content-center h-100" *ngIf="stats">
             <div class="d-flex justify-content-between w-100">
                 <div>
                     <ul>
