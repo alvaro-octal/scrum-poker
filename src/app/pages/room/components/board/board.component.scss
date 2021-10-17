@@ -1,5 +1,6 @@
 div.board {
-    background-color: #35654d;
+    background: rgb(68,112,91);
+    background: radial-gradient(circle, rgba(68,112,91,1) 0%, rgba(40,75,58,1) 100%);
     border: solid #ba8c63 12px;
     border-radius: 70px;
 }
