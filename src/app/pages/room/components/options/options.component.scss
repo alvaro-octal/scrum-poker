@@ -1,9 +1,13 @@
 .card {
-    height: 80px;
+    height: 90px;
     width: 60px;
-    font-size: 30px;
+    font-size: 28px;
     position: relative;
     animation: fadein 0.5s ease-out forwards;
+    border: 1px solid rgba(0, 0, 0, 0.225);
+    border-radius: 0.45rem;
+    margin-right: 0.45rem;
+    box-shadow: 2px 2px 2px #aaa;
 
     &.option-selected {
         animation: bounce 0.25s ease-out forwards;
@@ -19,6 +23,16 @@
         right: 5px;
         font-size: 12px;
     }
+}
+
+.card:hover {
+    color: white;
+    background-color: rgb(186, 140, 99);
+    cursor: pointer;
+}
+
+.card-number {
+    font-weight: bolder;
 }
 
 @keyframes fadein {

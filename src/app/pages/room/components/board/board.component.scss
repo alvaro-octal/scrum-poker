@@ -1,5 +1,16 @@
 div.board {
-    background-color: #35654d;
-    border: solid #ba8c63 8px;
-    border-radius: 16px;
+    background: rgb(68,112,91);
+    background: radial-gradient(circle, rgba(68,112,91,1) 0%, rgba(40,75,58,1) 100%);
+    border: solid #ba8c63 12px;
+    border-radius: 70px;
+}
+
+.board-msg {
+    border:1px solid white;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 70px;
+    font-size: 2.5rem;
+    background-color: rgb(255, 255, 255, .2);
+    text-shadow: 1px 1px 2px #444;
 }

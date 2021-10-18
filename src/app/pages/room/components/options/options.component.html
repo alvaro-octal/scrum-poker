@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center">
     <div
-        class="card me-1"
+        class="card"
         [class.option-selected]="optionSelected === option"
         [class.fadeout]="fadeout"
         (click)="onOptionSelected(option)"
@@ -8,7 +8,7 @@
     >
         <span class="card-tip" *ngIf="index <= 9">({{ index }})</span>
         <div class="card-body d-flex align-items-center justify-content-center p-2">
-            <span class="font-monospace">
+            <span class="font-monospace card-number">
                 {{ option | optionRenderer }}
             </span>
         </div>
