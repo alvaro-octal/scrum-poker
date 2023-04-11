@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import { UserInterface } from './interfaces/user/user.interface';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,26 +9,21 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
     public id: string | undefined;
-    public session: UserInterface | undefined;
     public originalURL: string;
 
     constructor(private router: Router, private auth: Auth) {
         this.originalURL = document.location.pathname;
 
-        this.auth.onAuthStateChanged((user): void => {
+        this.auth.onAuthStateChanged(async (user): Promise<void> => {
             if (user) {
                 if (this.originalURL.startsWith('/room')) {
-                    this.router.navigateByUrl(this.originalURL);
+                    await this.router.navigateByUrl(this.originalURL);
                 } else {
-                    this.router.navigateByUrl('/');
+                    await this.router.navigateByUrl('/');
                 }
             } else {
-                this.router.navigateByUrl('/login');
+                await this.router.navigateByUrl('/login');
             }
         });
-    }
-
-    public logout(): void {
-        this.auth.signOut();
     }
 }

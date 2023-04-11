@@ -44,10 +44,10 @@ export class RoundComponent implements OnInit {
 
         document.addEventListener(
             'keydown',
-            (event: KeyboardEvent): void => {
+            async (event: KeyboardEvent): Promise<void> => {
                 if (event.code === 'Escape') {
                     if (this._round && !this._round.resolved) {
-                        this.deleteVote();
+                        await this.deleteVote();
                     }
                 }
             },
@@ -75,13 +75,17 @@ export class RoundComponent implements OnInit {
 
     ngOnInit(): void {}
 
-    public vote(round: RoundInterface, value: VoteValue): void {
+    public async vote(round: RoundInterface, value: VoteValue): Promise<void> {
         if (!this.session) {
+            console.error('No session was found');
+            return;
+        } else if (!this.room?.id) {
             console.error('No session was found');
             return;
         }
 
-        this.roundService.vote(round.id, this.session, value);
+        await this.roundService.vote(round.id, this.session, value);
+        await this.roomService.coffee(this.room?.id, this.session, value === null ? 10 : -5);
     }
 
     public async resolve(round: RoundInterface): Promise<void> {
@@ -116,7 +120,7 @@ export class RoundComponent implements OnInit {
         };
     }
 
-    public next(): void {
+    public async next(): Promise<void> {
         if (!this.room) {
             console.error('No room was provided');
             return;
@@ -124,10 +128,10 @@ export class RoundComponent implements OnInit {
 
         this.stats = undefined;
 
-        this.roomService.next(this.room.id);
+        await this.roomService.next(this.room.id);
     }
 
-    public deleteVote(): void {
+    public async deleteVote(): Promise<void> {
         if (!this._id) {
             console.error('Round Id was not provided');
             return;
@@ -136,7 +140,7 @@ export class RoundComponent implements OnInit {
             return;
         }
 
-        this.roundService.deleteVote(this._id, this.session);
+        await this.roundService.deleteVote(this._id, this.session);
     }
 }
 

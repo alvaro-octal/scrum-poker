@@ -9,7 +9,12 @@
         <!-- Cards -->
 
         <div class="d-flex justify-content-center flex-wrap" *ngIf="!voted && !stats">
-            <app-options [values]="values" (selected)="vote(round, $event)"></app-options>
+            <app-options
+                [session]="session"
+                [room]="room"
+                [values]="values"
+                (selected)="vote(round, $event)"
+            ></app-options>
         </div>
 
         <!-- Resolve or Wait -->
@@ -32,8 +37,8 @@
                 <div>
                     <ul>
                         <li><span class="fw-bold">Votes</span>: {{ stats.count }}</li>
-                        <li><span class="fw-bold">AVG</span>: {{ stats.avg | number: '1.0-1' }}</li>
-                        <li><span class="fw-bold">STD</span>: {{ stats.std | number: '1.0-1' }}</li>
+                        <li><span class="fw-bold">AVG</span>: {{ stats.avg | number : '1.0-1' }}</li>
+                        <li><span class="fw-bold">STD</span>: {{ stats.std | number : '1.0-1' }}</li>
                     </ul>
                 </div>
                 <div class="d-flex align-items-center">

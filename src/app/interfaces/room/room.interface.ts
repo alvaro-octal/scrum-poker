@@ -8,6 +8,7 @@ export interface RoomInterface {
   users: Record<string, UserInterface>;
   round: DocumentReference<RoundInterface>;
   rounds: DocumentReference<RoundInterface>[];
+  coffees: Record<string, number>;
   created_at: Date;
   active_at: Date;
 }

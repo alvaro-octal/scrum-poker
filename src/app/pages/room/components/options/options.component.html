@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center">
     <div
-        class="card"
+        class="card {{ rumble ?? '' }}"
         [class.option-selected]="optionSelected === option"
         [class.fadeout]="fadeout"
         (click)="onOptionSelected(option)"

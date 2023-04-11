@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { VoteValue } from '../../../../interfaces/room/round/vote/vote.interface';
+import { UserInterface } from '../../../../interfaces/user/user.interface';
+import { RoomInterface } from '../../../../interfaces/room/room.interface';
 
 @Component({
     selector: 'app-options',
@@ -10,7 +12,19 @@ export class OptionsComponent implements OnInit {
     public fadeout: boolean = false;
     public optionSelected: VoteValue | undefined;
     public options: VoteValue[] | undefined;
+    public rumble: string | undefined;
 
+    private _session: UserInterface | undefined;
+    private _room: RoomInterface | undefined;
+
+    @Input() set session(value: UserInterface | undefined) {
+        this._session = value;
+        this.calculateRumble(this._session, this._room);
+    }
+    @Input() set room(value: RoomInterface | undefined) {
+        this._room = value;
+        this.calculateRumble(this._session, this._room);
+    }
     @Input() set values(values: VoteValue[] | undefined) {
         this.options = [];
 
@@ -57,5 +71,25 @@ export class OptionsComponent implements OnInit {
         setTimeout((): void => {
             this.selected.emit(value);
         }, 250);
+    }
+
+    private calculateRumble(user: UserInterface | undefined, room: RoomInterface | undefined): void {
+        console.log({
+            user: user,
+            room: room
+        });
+        if (!user) {
+            return;
+        } else if (!room) {
+            return;
+        }
+
+        const value: number | undefined = room.coffees[user.uid];
+
+        if (!value) {
+            this.rumble = undefined;
+        } else {
+            this.rumble = `rumble-${Math.min(value, 30)}`;
+        }
     }
 }

@@ -40,9 +40,9 @@ export class RoundService {
         };
     }
 
-    vote(id: string, user: UserInterface, value: VoteValue): void {
+    async vote(id: string, user: UserInterface, value: VoteValue): Promise<void> {
         const document = this.firestore.doc<RoundInterface>(`rounds/${id}`);
-        document.update({
+        await document.update({
             [`votes.${user.uid}`]: {
                 value: value,
                 user: user,
@@ -51,16 +51,16 @@ export class RoundService {
         });
     }
 
-    deleteVote(id: string, user: UserInterface): void {
+    async deleteVote(id: string, user: UserInterface): Promise<void> {
         const document = this.firestore.doc<RoundInterface>(`rounds/${id}`);
-        document.update({
+        await document.update({
             [`votes.${user.uid}`]: deleteField()
         });
     }
 
-    resolve(id: string): void {
+    async resolve(id: string): Promise<void> {
         const document = this.firestore.doc<RoundInterface>(`rounds/${id}`);
-        document.update({
+        await document.update({
             resolved: true
         });
     }
