@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { VoteValue } from '../../../../interfaces/room/round/vote/vote.interface';
 import { UserInterface } from '../../../../interfaces/user/user.interface';
 import { RoomInterface } from '../../../../interfaces/room/room.interface';
@@ -8,7 +8,7 @@ import { RoomInterface } from '../../../../interfaces/room/room.interface';
     templateUrl: './options.component.html',
     styleUrls: ['./options.component.scss']
 })
-export class OptionsComponent implements OnInit {
+export class OptionsComponent {
     public fadeout: boolean = false;
     public optionSelected: VoteValue | undefined;
     public options: VoteValue[] | undefined;
@@ -53,8 +53,6 @@ export class OptionsComponent implements OnInit {
         );
     }
 
-    ngOnInit(): void {}
-
     public onOptionSelected(value: VoteValue): void {
         if (this.optionSelected) {
             return;
@@ -74,10 +72,6 @@ export class OptionsComponent implements OnInit {
     }
 
     private calculateRumble(user: UserInterface | undefined, room: RoomInterface | undefined): void {
-        console.log({
-            user: user,
-            room: room
-        });
         if (!user) {
             return;
         } else if (!room) {

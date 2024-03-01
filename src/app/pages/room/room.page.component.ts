@@ -18,7 +18,11 @@ export class RoomPageComponent implements OnInit {
     public room$: Observable<RoomInterface> | undefined;
     public roundId: string | undefined;
 
-    constructor(private auth: Auth, private route: ActivatedRoute, private roomService: RoomService) {
+    constructor(
+        private auth: Auth,
+        private route: ActivatedRoute,
+        private roomService: RoomService
+    ) {
         this.auth.onAuthStateChanged((user): void => {
             if (user) {
                 this.session = {
@@ -59,7 +63,7 @@ export class RoomPageComponent implements OnInit {
                             return room.users[key];
                         });
 
-                    if (!room.users.hasOwnProperty(uid)) {
+                    if (!Object.prototype.hasOwnProperty.call(room.users, uid)) {
                         await this.roomService.join(id, this.session);
                     }
                 });

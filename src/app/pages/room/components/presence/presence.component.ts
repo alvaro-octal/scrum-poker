@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { UserInterface } from '../../../../interfaces/user/user.interface';
 import { RoundService } from '../../../../services/round/round.service';
@@ -10,7 +10,7 @@ import { RoundInterface } from '../../../../interfaces/room/round/round.interfac
     templateUrl: './presence.component.html',
     styleUrls: ['./presence.component.scss']
 })
-export class PresenceComponent implements OnInit {
+export class PresenceComponent {
     public session: UserInterface | undefined;
     public round$: Observable<RoundInterface> | undefined;
 
@@ -18,7 +18,10 @@ export class PresenceComponent implements OnInit {
     @Input() set round(round: string) {
         this.round$ = this.roundService.get(round);
     }
-    constructor(private auth: Auth, private roundService: RoundService) {
+    constructor(
+        private auth: Auth,
+        private roundService: RoundService
+    ) {
         this.auth.onAuthStateChanged((user): void => {
             if (user) {
                 this.session = {
@@ -32,6 +35,4 @@ export class PresenceComponent implements OnInit {
             }
         });
     }
-
-    ngOnInit(): void {}
 }

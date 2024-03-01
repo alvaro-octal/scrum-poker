@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { Auth, signInWithPopup } from '@angular/fire/auth';
 
@@ -7,7 +7,7 @@ import { Auth, signInWithPopup } from '@angular/fire/auth';
     templateUrl: './login.page.component.html',
     styleUrls: ['./login.page.component.scss']
 })
-export class LoginPageComponent implements OnInit {
+export class LoginPageComponent {
     public message: string;
     private messages: string[] = [
         'Now with money',
@@ -23,8 +23,6 @@ export class LoginPageComponent implements OnInit {
         this.message = this.messages[Math.floor(Math.random() * this.messages.length)];
     }
 
-    ngOnInit(): void {}
-
     public login(): void {
         const provider = new GoogleAuthProvider();
 
@@ -33,13 +31,9 @@ export class LoginPageComponent implements OnInit {
                 // This gives you a Google Access Token. You can use it to access the Google API.
                 const credential = GoogleAuthProvider.credentialFromResult(result);
 
-                if (credential) {
-                    const token = credential.accessToken;
-                } else {
+                if (!credential) {
                     console.error('No credential found!', credential);
                 }
-
-                // ...
             })
             .catch((error) => {
                 // Handle Errors here.
@@ -51,8 +45,7 @@ export class LoginPageComponent implements OnInit {
                 const credential = GoogleAuthProvider.credentialFromError(error);
                 // ...
 
-                console.error(error);
-                console.debug({
+                console.error(error, {
                     code: errorCode,
                     message: errorMessage,
                     email: email,

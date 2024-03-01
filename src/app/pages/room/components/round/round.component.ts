@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RoundInterface } from '../../../../interfaces/room/round/round.interface';
 import { VoteInterface, VoteValue } from '../../../../interfaces/room/round/vote/vote.interface';
 import { RoomInterface } from '../../../../interfaces/room/room.interface';
@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
     templateUrl: './round.component.html',
     styleUrls: ['./round.component.scss']
 })
-export class RoundComponent implements OnInit {
+export class RoundComponent {
     public voted: boolean = false;
     public round$: Observable<RoundInterface> | undefined;
     public session: UserInterface | undefined;
@@ -28,7 +28,11 @@ export class RoundComponent implements OnInit {
         this._id = id;
         this.refresh(id);
     }
-    constructor(private auth: Auth, private roomService: RoomService, private roundService: RoundService) {
+    constructor(
+        private auth: Auth,
+        private roomService: RoomService,
+        private roundService: RoundService
+    ) {
         this.auth.onAuthStateChanged((user): void => {
             if (user) {
                 this.session = {
@@ -64,7 +68,9 @@ export class RoundComponent implements OnInit {
         this.round$ = this.roundService.get(id);
         this.round$.subscribe((round: RoundInterface): void => {
             this._round = round;
-            this.voted = round.votes.hasOwnProperty(this.session?.uid || '');
+
+            this.voted = Object.prototype.hasOwnProperty.call(round.votes, this.session?.uid || '');
+
             if (round.resolved) {
                 this.calculateResults(round);
             } else {
@@ -72,8 +78,6 @@ export class RoundComponent implements OnInit {
             }
         });
     }
-
-    ngOnInit(): void {}
 
     public async vote(round: RoundInterface, value: VoteValue): Promise<void> {
         if (!this.session) {
