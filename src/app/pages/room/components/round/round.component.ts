@@ -7,6 +7,7 @@ import { RoundService } from '../../../../services/round/round.service';
 import { Auth } from '@angular/fire/auth';
 import { UserInterface } from '../../../../interfaces/user/user.interface';
 import { Observable } from 'rxjs';
+import * as confetti from 'canvas-confetti';
 
 @Component({
     selector: 'app-round',
@@ -122,6 +123,10 @@ export class RoundComponent {
             avg: avg,
             std: std
         };
+
+        if (std === 0 && values.length > 1) {
+            this.launchConfetti();
+        }
     }
 
     public async next(): Promise<void> {
@@ -145,6 +150,24 @@ export class RoundComponent {
         }
 
         await this.roundService.deleteVote(this._id, this.session);
+    }
+
+    private launchConfetti(): void {
+        const canvas: HTMLCanvasElement = document.getElementsByTagName('canvas')[0];
+
+        if (!canvas) {
+            return;
+        }
+
+        const confettiCannon: confetti.CreateTypes = confetti.create(canvas, {
+            resize: true
+        });
+
+        confettiCannon({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
     }
 }
 
