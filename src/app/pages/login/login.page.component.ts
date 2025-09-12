@@ -5,7 +5,8 @@ import { Auth, signInWithPopup } from '@angular/fire/auth';
 @Component({
     selector: 'app-login-page',
     templateUrl: './login.page.component.html',
-    styleUrls: ['./login.page.component.scss']
+    styleUrls: ['./login.page.component.scss'],
+    standalone: false
 })
 export class LoginPageComponent {
     public message: string;

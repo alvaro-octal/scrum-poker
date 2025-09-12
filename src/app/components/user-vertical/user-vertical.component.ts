@@ -7,9 +7,10 @@ import { Observable } from 'rxjs';
 import { UserInterface } from '../../interfaces/user/user.interface';
 
 @Component({
-  selector: 'app-user-vertical',
-  templateUrl: './user-vertical.component.html',
-  styleUrls: ['./user-vertical.component.scss'],
+    selector: 'app-user-vertical',
+    templateUrl: './user-vertical.component.html',
+    styleUrls: ['./user-vertical.component.scss'],
+    standalone: false
 })
 export class UserVerticalComponent implements OnInit {
   public presence$: Observable<PresenceInterface> | undefined;

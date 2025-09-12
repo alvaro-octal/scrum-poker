@@ -6,7 +6,8 @@ import { UserInterface } from '../../interfaces/user/user.interface';
 @Component({
     selector: 'app-user-horizontal',
     templateUrl: './user-horizontal.component.html',
-    styleUrls: ['./user-horizontal.component.scss']
+    styleUrls: ['./user-horizontal.component.scss'],
+    standalone: false
 })
 export class UserHorizontalComponent implements OnInit {
     public presence$: Observable<PresenceInterface> | undefined;

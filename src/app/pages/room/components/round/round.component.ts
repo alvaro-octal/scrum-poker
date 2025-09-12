@@ -12,7 +12,8 @@ import * as confetti from 'canvas-confetti';
 @Component({
     selector: 'app-round',
     templateUrl: './round.component.html',
-    styleUrls: ['./round.component.scss']
+    styleUrls: ['./round.component.scss'],
+    standalone: false
 })
 export class RoundComponent {
     public voted: boolean = false;

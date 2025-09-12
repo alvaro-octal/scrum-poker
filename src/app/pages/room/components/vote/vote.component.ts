@@ -4,7 +4,8 @@ import { VoteInterface } from '../../../../interfaces/room/round/vote/vote.inter
 @Component({
     selector: 'app-vote',
     templateUrl: './vote.component.html',
-    styleUrls: ['./vote.component.scss']
+    styleUrls: ['./vote.component.scss'],
+    standalone: false
 })
 export class VoteComponent implements OnInit {
     public initials: string | undefined;

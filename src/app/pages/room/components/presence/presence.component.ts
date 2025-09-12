@@ -8,7 +8,8 @@ import { RoundInterface } from '../../../../interfaces/room/round/round.interfac
 @Component({
     selector: 'app-presence',
     templateUrl: './presence.component.html',
-    styleUrls: ['./presence.component.scss']
+    styleUrls: ['./presence.component.scss'],
+    standalone: false
 })
 export class PresenceComponent {
     public session: UserInterface | undefined;

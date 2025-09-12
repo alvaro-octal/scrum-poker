@@ -8,7 +8,8 @@ import { RoomInterface } from '../../../../interfaces/room/room.interface';
 @Component({
     selector: 'app-board',
     templateUrl: './board.component.html',
-    styleUrls: ['./board.component.scss']
+    styleUrls: ['./board.component.scss'],
+    standalone: false
 })
 export class BoardComponent {
     public round$: Observable<RoundInterface> | undefined;

@@ -8,9 +8,10 @@ import { UserInterface } from '../../interfaces/user/user.interface';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.page.component.html',
-  styleUrls: ['./home.page.component.scss'],
+    selector: 'app-home',
+    templateUrl: './home.page.component.html',
+    styleUrls: ['./home.page.component.scss'],
+    standalone: false
 })
 export class HomePageComponent {
   public showJoin: boolean = false;

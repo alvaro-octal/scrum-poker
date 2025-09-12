@@ -10,7 +10,8 @@ import { Helpers } from '../../helpers/helpers';
 @Component({
     selector: 'app-room.page',
     templateUrl: './room.page.component.html',
-    styleUrls: ['./room.page.component.scss']
+    styleUrls: ['./room.page.component.scss'],
+    standalone: false
 })
 export class RoomPageComponent implements OnInit {
     public session: UserInterface | undefined;
