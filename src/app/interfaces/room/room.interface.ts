@@ -1,14 +1,14 @@
 import { UserInterface } from '../user/user.interface';
 import { RoundInterface } from './round/round.interface';
-import { DocumentReference} from '@angular/fire/compat/firestore';
+import { DocumentReference } from '@angular/fire/firestore';
 
 export interface RoomInterface {
-  id: string;
-  owner: UserInterface;
-  users: Record<string, UserInterface>;
-  round: DocumentReference<RoundInterface>;
-  rounds: DocumentReference<RoundInterface>[];
-  coffees: Record<string, number>;
-  created_at: Date;
-  active_at: Date;
+    id: string;
+    owner: UserInterface;
+    users: Record<string, UserInterface>;
+    round: DocumentReference<RoundInterface>;
+    rounds: DocumentReference<RoundInterface>[];
+    coffees: Record<string, number>;
+    created_at: Date;
+    active_at: Date;
 }

@@ -1,18 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: false
+    imports: [RouterOutlet],
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
     public id: string | undefined;
     public originalURL: string;
 
-    constructor(private router: Router, private auth: Auth) {
+    private readonly router: Router = inject(Router);
+    private readonly auth: Auth = inject(Auth);
+
+    constructor() {
         this.originalURL = document.location.pathname;
 
         this.auth.onAuthStateChanged(async (user): Promise<void> => {

@@ -1,15 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { RoundService } from '../../../../services/round/round.service';
 import { Observable } from 'rxjs';
 import { RoundInterface } from '../../../../interfaces/room/round/round.interface';
 import { VoteInterface } from '../../../../interfaces/room/round/vote/vote.interface';
-import { RoomInterface } from '../../../../interfaces/room/room.interface';
+import { VoteComponent } from '../vote/vote.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'app-board',
     templateUrl: './board.component.html',
-    styleUrls: ['./board.component.scss'],
-    standalone: false
+    imports: [VoteComponent, AsyncPipe],
+    styleUrls: ['./board.component.scss']
 })
 export class BoardComponent {
     public round$: Observable<RoundInterface> | undefined;
@@ -17,12 +18,12 @@ export class BoardComponent {
 
     private _id: string | undefined;
 
-    @Input() room: RoomInterface | undefined;
-    @Input() set id(id: string) {
+    @Input({ required: true }) set id(id: string) {
         this._id = id;
         this.refresh(id);
     }
-    constructor(private roundService: RoundService) {}
+
+    private readonly roundService: RoundService = inject(RoundService);
 
     private refresh(id: string | undefined = this._id): void {
         if (!id) {

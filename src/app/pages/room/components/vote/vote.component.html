@@ -1,10 +1,16 @@
-<div class="vote" [class.flipped]="flipped" *ngIf="vote">
-    <div class="back"></div>
-    <div class="front" [class.front-corporate]="corporate">
-        <div class="front-content d-flex justify-content-center align-items-center">
-            <div class="value">{{ vote.value | optionRenderer }}</div>
-            <div class="suit top" *ngIf="initials">{{ initials }}</div>
-            <div class="suit bottom" *ngIf="initials">{{ initials }}</div>
+@if (vote) {
+    <div class="vote" [class.flipped]="flipped">
+        <div class="back"></div>
+        <div class="front" [class.front-corporate]="corporate">
+            <div class="front-content d-flex justify-content-center align-items-center">
+                <div class="value">{{ vote.value | optionRenderer }}</div>
+                @if (initials) {
+                    <div class="suit top">{{ initials }}</div>
+                }
+                @if (initials) {
+                    <div class="suit bottom">{{ initials }}</div>
+                }
+            </div>
         </div>
     </div>
-</div>
+}

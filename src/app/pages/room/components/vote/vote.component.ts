@@ -1,19 +1,19 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { VoteInterface } from '../../../../interfaces/room/round/vote/vote.interface';
+import { OptionRendererPipe } from '../../../../pipes/option/option.renderer.pipe';
 
 @Component({
     selector: 'app-vote',
     templateUrl: './vote.component.html',
-    styleUrls: ['./vote.component.scss'],
-    standalone: false
+    imports: [OptionRendererPipe],
+    styleUrls: ['./vote.component.scss']
 })
 export class VoteComponent implements OnInit {
     public initials: string | undefined;
     public corporate: boolean | undefined;
 
-    @Input() vote: VoteInterface | undefined;
-    @Input() flipped: boolean | undefined;
-    constructor() {}
+    @Input({ required: true }) vote: VoteInterface | undefined;
+    @Input({ required: true }) flipped: boolean | undefined;
 
     ngOnInit(): void {
         if (!this.vote) {

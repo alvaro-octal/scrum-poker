@@ -1,11 +1,14 @@
-<div *ngIf="user">
-  <div class="card">
-    <img
-      class="img-fluid m-1 rounded"
-      [src]="user.photoURL"
-      [alt]="user.displayName || 'UNKNOWN'"
-      *ngIf="user.photoURL"
-    /><span
+@if (user) {
+  <div>
+    <div class="card">
+      @if (user.photoURL) {
+        <img
+          class="img-fluid m-1 rounded"
+          [src]="user.photoURL"
+          [alt]="user.displayName || 'UNKNOWN'"
+          />
+        }@if (presence$ | async; as presence) {
+        <span
       class="
         position-absolute
         top-0
@@ -20,16 +23,23 @@
         'bg-warning': presence.status === 'away',
         'bg-dark': presence.status === 'offline'
       }"
-      *ngIf="presence$ | async as presence"
-    >
-      <span class="visually-hidden">{{ presence.status }}</span>
-    </span>
-    <div class="card-body text-center p-1">
-      <span class="user-name" *ngIf="user.displayName">
-        {{ user.displayName }}
-      </span>
-      <span class="text-black-50" *ngIf="!user.displayName">UNKNOWN</span>
+          >
+          <span class="visually-hidden">{{ presence.status }}</span>
+        </span>
+      }
+      <div class="card-body text-center p-1">
+        @if (user.displayName) {
+          <span class="user-name">
+            {{ user.displayName }}
+          </span>
+        }
+        @if (!user.displayName) {
+          <span class="text-black-50">UNKNOWN</span>
+        }
+      </div>
     </div>
   </div>
-</div>
-<div *ngIf="!user">LOADING...</div>
+}
+@if (!user) {
+  <div>LOADING...</div>
+}

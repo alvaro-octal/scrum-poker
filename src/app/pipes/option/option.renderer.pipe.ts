@@ -1,11 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { VoteValue } from '../../interfaces/room/round/vote/vote.interface';
 
 @Pipe({
-    name: 'optionRenderer',
-    standalone: false
+    name: 'optionRenderer'
 })
 export class OptionRendererPipe implements PipeTransform {
-    transform(value: number | null): string {
+    transform(value: VoteValue): string {
         if (value === null) {
             return '☕';
         } else if (value === 0.5) {

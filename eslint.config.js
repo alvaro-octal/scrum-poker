@@ -37,12 +37,17 @@ module.exports = tseslint.config(
                 }
             ],
             'prettier/prettier': 'error', // Enforce Prettier formatting as lint errors
-            '@typescript-eslint/no-explicit-any': 'error' // Forbid usage of 'any'
+            '@typescript-eslint/no-explicit-any': 'error', // Forbid usage of 'any',
+            '@angular-eslint/prefer-standalone': 'off',
+            '@typescript-eslint/no-inferrable-types': 'off'
         }
     },
     {
         files: ['**/*.html'],
         extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
-        rules: {}
+        rules: {
+            '@angular-eslint/template/click-events-have-key-events': 'off',
+            '@angular-eslint/template/interactive-supports-focus': 'off'
+        }
     }
 );

@@ -1,14 +1,23 @@
-<table class="table mb-0" *ngIf="round$ | async as round">
-    <tbody>
-        <tr *ngIf="session">
-            <td class="table-light">
-                <app-user-horizontal [user]="session" [check]="!!round.votes[session.uid]"></app-user-horizontal>
-            </td>
-        </tr>
-        <tr *ngFor="let user of users">
-            <td>
-                <app-user-horizontal [user]="user" [check]="!!round.votes[user.uid]"></app-user-horizontal>
-            </td>
-        </tr>
-    </tbody>
-</table>
+@if (round$ | async; as round) {
+    <table class="table mb-0">
+        <tbody>
+            @if (session) {
+                <tr>
+                    <td class="table-light">
+                        <app-user-horizontal
+                            [user]="session"
+                            [check]="!!round.votes[session.uid]"
+                        ></app-user-horizontal>
+                    </td>
+                </tr>
+            }
+            @for (user of users; track user) {
+                <tr>
+                    <td>
+                        <app-user-horizontal [user]="user" [check]="!!round.votes[user.uid]"></app-user-horizontal>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

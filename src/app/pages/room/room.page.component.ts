@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RoomService } from '../../services/room/room.service';
 import { Observable } from 'rxjs';
 import { RoomInterface } from '../../interfaces/room/room.interface';
@@ -6,12 +6,15 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { UserInterface } from '../../interfaces/user/user.interface';
 import { Auth } from '@angular/fire/auth';
 import { Helpers } from '../../helpers/helpers';
+import { PresenceComponent } from './components/presence/presence.component';
+import { RoundComponent } from './components/round/round.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-    selector: 'app-room.page',
+    selector: 'app-room-page',
     templateUrl: './room.page.component.html',
-    styleUrls: ['./room.page.component.scss'],
-    standalone: false
+    imports: [PresenceComponent, RoundComponent, AsyncPipe],
+    styleUrls: ['./room.page.component.scss']
 })
 export class RoomPageComponent implements OnInit {
     public session: UserInterface | undefined;
@@ -19,11 +22,11 @@ export class RoomPageComponent implements OnInit {
     public room$: Observable<RoomInterface> | undefined;
     public roundId: string | undefined;
 
-    constructor(
-        private auth: Auth,
-        private route: ActivatedRoute,
-        private roomService: RoomService
-    ) {
+    private readonly auth: Auth = inject(Auth);
+    private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly roomService: RoomService = inject(RoomService);
+
+    constructor() {
         this.auth.onAuthStateChanged((user): void => {
             if (user) {
                 this.session = {
@@ -51,7 +54,7 @@ export class RoomPageComponent implements OnInit {
                         return;
                     }
 
-                    const { key } = Helpers.destructureDocumentPath(room.round.path);
+                    const { key } = Helpers.DestructureDocumentPath(room.round.path);
                     this.roundId = key;
 
                     const uid: string = this.session.uid;

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { RoundInterface } from '../../../../interfaces/room/round/round.interface';
 import { VoteInterface, VoteValue } from '../../../../interfaces/room/round/vote/vote.interface';
 import { RoomInterface } from '../../../../interfaces/room/room.interface';
@@ -7,13 +7,16 @@ import { RoundService } from '../../../../services/round/round.service';
 import { Auth } from '@angular/fire/auth';
 import { UserInterface } from '../../../../interfaces/user/user.interface';
 import { Observable } from 'rxjs';
-import * as confetti from 'canvas-confetti';
+import confetti from 'canvas-confetti';
+import { BoardComponent } from '../board/board.component';
+import { AsyncPipe, DecimalPipe } from '@angular/common';
+import { OptionsComponent } from '../options/options.component';
 
 @Component({
     selector: 'app-round',
     templateUrl: './round.component.html',
-    styleUrls: ['./round.component.scss'],
-    standalone: false
+    imports: [BoardComponent, AsyncPipe, OptionsComponent, DecimalPipe],
+    styleUrls: ['./round.component.scss']
 })
 export class RoundComponent {
     public voted: boolean = false;
@@ -25,16 +28,16 @@ export class RoundComponent {
 
     public values: VoteValue[] = [0.5, 1, 2, 3, 5, 8, 13, 21, 34, 55, null];
 
-    @Input() room: RoomInterface | undefined;
-    @Input() set id(id: string) {
+    @Input({ required: true }) room: RoomInterface | undefined;
+    @Input({ required: true }) set id(id: string) {
         this._id = id;
         this.refresh(id);
     }
-    constructor(
-        private auth: Auth,
-        private roomService: RoomService,
-        private roundService: RoundService
-    ) {
+    private readonly auth: Auth = inject(Auth);
+    private readonly roomService: RoomService = inject(RoomService);
+    private readonly roundService: RoundService = inject(RoundService);
+
+    constructor() {
         this.auth.onAuthStateChanged((user): void => {
             if (user) {
                 this.session = {

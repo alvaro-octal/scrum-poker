@@ -1,24 +1,25 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { RoomInterface } from '../../interfaces/room/room.interface';
-import { AngularFirestore, DocumentReference } from '@angular/fire/compat/firestore';
 import { UserInterface } from '../../interfaces/user/user.interface';
 import { RoundCreationResult, RoundService } from '../round/round.service';
 import { Observable } from 'rxjs';
-import firebase from 'firebase/compat/app';
-import firestore = firebase.firestore;
+import { increment } from '@angular/fire/database';
+import { doc, docData, Firestore, setDoc, updateDoc, DocumentReference } from '@angular/fire/firestore';
 
 @Injectable({
     providedIn: 'root'
 })
 export class RoomService {
-    constructor(private firestore: AngularFirestore, private roundService: RoundService) {}
+    private readonly firestore: Firestore = inject(Firestore);
+    private readonly roundService: RoundService = inject(RoundService);
 
     public get(id: string): Observable<RoomInterface> {
         return this.getByPath(`rooms/${id}`);
     }
 
     public getByPath(path: string): Observable<RoomInterface> {
-        return this.firestore.doc(path).valueChanges() as Observable<RoomInterface>;
+        const docRef = doc(this.firestore, path);
+        return docData(docRef) as Observable<RoomInterface>;
     }
 
     public async create(user: UserInterface): Promise<RoomCreationResult> {
@@ -28,8 +29,8 @@ export class RoomService {
 
         const result: RoundCreationResult = await this.roundService.create();
 
-        const document = this.firestore.doc<RoomInterface>(`rooms/${id}`);
-        await document.set({
+        const document = doc(this.firestore, `rooms/${id}`) as DocumentReference<RoomInterface>;
+        await setDoc(document, {
             id: id,
             owner: user,
             users: { [user.uid]: user },
@@ -40,14 +41,14 @@ export class RoomService {
             active_at: new Date()
         });
 
-        return { id: id, reference: document.ref };
+        return { id: id, reference: document };
     }
 
     public async next(id: string): Promise<RoundCreationResult> {
         const result: RoundCreationResult = await this.roundService.create();
 
-        const document = this.firestore.doc<RoomInterface>(`rooms/${id}`);
-        await document.update({
+        const document = doc(this.firestore, `rooms/${id}`);
+        await updateDoc(document, {
             round: result.reference
         });
 
@@ -55,17 +56,17 @@ export class RoomService {
     }
 
     public async join(id: string, user: UserInterface): Promise<void> {
-        const document = this.firestore.doc<RoomInterface>(`rooms/${id}`);
-        await document.update({
+        const document = doc(this.firestore, `rooms/${id}`);
+        await updateDoc(document, {
             [`users.${user.uid}`]: user,
             active_at: new Date()
         });
     }
 
     public async coffee(id: string, user: UserInterface, value: number): Promise<void> {
-        const document = this.firestore.doc<RoomInterface>(`rooms/${id}`);
-        await document.update({
-            [`coffees.${user.uid}`]: firestore.FieldValue.increment(value),
+        const roomRef = doc(this.firestore, `rooms/${id}`);
+        await updateDoc(roomRef, {
+            [`coffees.${user.uid}`]: increment(value),
             active_at: new Date()
         });
     }

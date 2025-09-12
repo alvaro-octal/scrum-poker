@@ -2,12 +2,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { VoteValue } from '../../../../interfaces/room/round/vote/vote.interface';
 import { UserInterface } from '../../../../interfaces/user/user.interface';
 import { RoomInterface } from '../../../../interfaces/room/room.interface';
+import { OptionRendererPipe } from '../../../../pipes/option/option.renderer.pipe';
 
 @Component({
     selector: 'app-options',
     templateUrl: './options.component.html',
-    styleUrls: ['./options.component.scss'],
-    standalone: false
+    imports: [OptionRendererPipe],
+    styleUrls: ['./options.component.scss']
 })
 export class OptionsComponent {
     public fadeout: boolean = false;
@@ -18,15 +19,15 @@ export class OptionsComponent {
     private _session: UserInterface | undefined;
     private _room: RoomInterface | undefined;
 
-    @Input() set session(value: UserInterface | undefined) {
+    @Input({ required: true }) set session(value: UserInterface | undefined) {
         this._session = value;
         this.calculateRumble(this._session, this._room);
     }
-    @Input() set room(value: RoomInterface | undefined) {
+    @Input({ required: true }) set room(value: RoomInterface | undefined) {
         this._room = value;
         this.calculateRumble(this._session, this._room);
     }
-    @Input() set values(values: VoteValue[] | undefined) {
+    @Input({ required: true }) set values(values: VoteValue[] | undefined) {
         this.options = [];
 
         if (!values) {

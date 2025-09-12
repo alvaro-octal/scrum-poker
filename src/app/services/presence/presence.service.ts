@@ -1,29 +1,42 @@
-import { Injectable } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { inject, Injectable } from '@angular/core';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
+import { Database, onDisconnect, onValue, ref, update } from '@angular/fire/database';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PresenceService {
-    constructor(private auth: Auth, private db: AngularFireDatabase) {
+    private readonly auth: Auth = inject(Auth);
+    private readonly db: Database = inject(Database);
+
+    constructor() {
         this.watchAuth();
         this.watchOnDisconnect();
         this.watchOnAway();
     }
 
     public getPresence(uid: string): Observable<PresenceInterface> {
-        return this.db.object(`status/${uid}`).valueChanges() as Observable<PresenceInterface>;
+        return new Observable<PresenceInterface>((subscriber) => {
+            const statusRef = ref(this.db, `status/${uid}`);
+
+            const unsubscribe = onValue(statusRef, (snapshot) => {
+                subscriber.next(snapshot.val() as PresenceInterface);
+            });
+
+            // Cleanup for unsubscribe
+            return () => unsubscribe();
+        });
     }
 
     private async setPresence(status: PresenceStatusInterface): Promise<void> {
         const user = this.auth.currentUser;
         if (user) {
-            await this.db.object(`status/${user.uid}`).update({
+            const statusRef = ref(this.db, `status/${user.uid}`);
+            await update(statusRef, {
                 status,
-                timestamp: new Date().getTime()
-            } as PresenceInterface);
+                timestamp: Date.now()
+            });
         }
     }
 
@@ -49,15 +62,15 @@ export class PresenceService {
     }
 
     private watchOnDisconnect() {
-        return this.auth.onAuthStateChanged(async (user) => {
+        return onAuthStateChanged(this.auth, async (user) => {
             if (user) {
-                await this.db
-                    .object(`status/${user.uid}`)
-                    .query.ref.onDisconnect()
-                    .update({
-                        status: 'offline',
-                        timestamp: new Date().getTime()
-                    } as PresenceInterface);
+                const statusRef = ref(this.db, `status/${user.uid}`);
+                const disconnectRef = onDisconnect(statusRef);
+
+                await disconnectRef.update({
+                    status: 'offline',
+                    timestamp: Date.now()
+                });
             }
         });
     }

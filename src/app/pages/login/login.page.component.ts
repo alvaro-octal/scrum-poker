@@ -1,12 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { Auth, signInWithPopup } from '@angular/fire/auth';
 
 @Component({
     selector: 'app-login-page',
     templateUrl: './login.page.component.html',
-    styleUrls: ['./login.page.component.scss'],
-    standalone: false
+    styleUrls: ['./login.page.component.scss']
 })
 export class LoginPageComponent {
     public message: string;
@@ -20,7 +19,9 @@ export class LoginPageComponent {
         'Not responsive!'
     ];
 
-    constructor(private auth: Auth) {
+    private readonly auth: Auth = inject(Auth);
+
+    constructor() {
         this.message = this.messages[Math.floor(Math.random() * this.messages.length)];
     }
 

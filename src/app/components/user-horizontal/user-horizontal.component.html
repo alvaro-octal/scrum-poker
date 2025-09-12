@@ -1,29 +1,35 @@
-<div class="d-flex" *ngIf="user">
+@if (user) {
+  <div class="d-flex">
     <div class="flex-shrink-1 position-relative">
-        <div class="image-container" [class.checked]="check">
-            <img
-                class="img-fluid rounded"
-                [src]="user.photoURL"
-                [alt]="user.displayName || 'UNKNOWN'"
-                *ngIf="user.photoURL"
+      <div class="image-container" [class.checked]="check">
+        @if (user.photoURL) {
+          <img
+            class="img-fluid rounded"
+            [src]="user.photoURL"
+            [alt]="user.displayName || 'UNKNOWN'"
             />
-            <div class="overlay text-success d-flex align-items-center justify-content-center" *ngIf="check">
-                <span>✓</span>
-            </div>
-            <span
-                class="position-absolute top-0 start-100 translate-middle p-2 border border-light rounded-circle"
+        }
+        @if (check) {
+          <div class="overlay text-success d-flex align-items-center justify-content-center">
+            <span>✓</span>
+          </div>
+        }
+        @if (presence$ | async; as presence) {
+          <span
+            class="position-absolute top-0 start-100 translate-middle p-2 border border-light rounded-circle"
                 [ngClass]="{
                     'bg-success': presence.status === 'online',
                     'bg-warning': presence.status === 'away',
                     'bg-dark': presence.status === 'offline'
                 }"
-                *ngIf="presence$ | async as presence"
             >
-                <span class="visually-hidden">{{ presence.status }}</span>
-            </span>
-        </div>
+            <span class="visually-hidden">{{ presence.status }}</span>
+          </span>
+        }
+      </div>
     </div>
     <div class="w-100 d-flex align-items-center p-2 image-container" [class.user-checked]="check">
-        <span class="d-block">{{ user.displayName }}</span>
+      <span class="d-block">{{ user.displayName }}</span>
     </div>
-</div>
+  </div>
+}

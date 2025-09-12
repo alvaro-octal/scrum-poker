@@ -1,31 +1,31 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore, DocumentReference } from '@angular/fire/compat/firestore';
+import { inject, Injectable } from '@angular/core';
 import { UserInterface } from '../../interfaces/user/user.interface';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidV4 } from 'uuid';
 import { RoundInterface } from '../../interfaces/room/round/round.interface';
 import { Observable } from 'rxjs';
 import { VoteValue } from '../../interfaces/room/round/vote/vote.interface';
-import { deleteField } from '@angular/fire/firestore';
+import { deleteField, doc, docData, Firestore, setDoc, updateDoc, DocumentReference } from '@angular/fire/firestore';
 
 @Injectable({
     providedIn: 'root'
 })
 export class RoundService {
-    constructor(private firestore: AngularFirestore) {}
+    private readonly firestore: Firestore = inject(Firestore);
 
     public get(id: string): Observable<RoundInterface> {
         return this.getByPath(`rounds/${id}`);
     }
 
     public getByPath(path: string): Observable<RoundInterface> {
-        return this.firestore.doc(path).valueChanges() as Observable<RoundInterface>;
+        const docRef = doc(this.firestore, path);
+        return docData(docRef) as Observable<RoundInterface>;
     }
 
     public async create(): Promise<RoundCreationResult> {
-        const id: string = uuidv4();
+        const id: string = uuidV4();
 
-        const document = this.firestore.doc<RoundInterface>(`rounds/${id}`);
-        await document.set({
+        const document = doc(this.firestore, `rounds/${id}`) as DocumentReference<RoundInterface>;
+        await setDoc(document, {
             id: id,
             title: '',
             description: '',
@@ -36,13 +36,13 @@ export class RoundService {
 
         return {
             id: id,
-            reference: document.ref
+            reference: document
         };
     }
 
     async vote(id: string, user: UserInterface, value: VoteValue): Promise<void> {
-        const document = this.firestore.doc<RoundInterface>(`rounds/${id}`);
-        await document.update({
+        const document = doc(this.firestore, `rounds/${id}`);
+        await updateDoc(document, {
             [`votes.${user.uid}`]: {
                 value: value,
                 user: user,
@@ -52,15 +52,15 @@ export class RoundService {
     }
 
     async deleteVote(id: string, user: UserInterface): Promise<void> {
-        const document = this.firestore.doc<RoundInterface>(`rounds/${id}`);
-        await document.update({
+        const document = doc(this.firestore, `rounds/${id}`);
+        await updateDoc(document, {
             [`votes.${user.uid}`]: deleteField()
         });
     }
 
     async resolve(id: string): Promise<void> {
-        const document = this.firestore.doc<RoundInterface>(`rounds/${id}`);
-        await document.update({
+        const document = doc(this.firestore, `rounds/${id}`);
+        await updateDoc(document, {
             resolved: true
         });
     }
