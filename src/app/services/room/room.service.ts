@@ -4,7 +4,7 @@ import { UserInterface } from '../../interfaces/user/user.interface';
 import { RoundCreationResult, RoundService } from '../round/round.service';
 import { Observable } from 'rxjs';
 import { increment } from '@angular/fire/database';
-import { doc, docData, Firestore, setDoc, updateDoc, DocumentReference } from '@angular/fire/firestore';
+import { doc, docData, Firestore, setDoc, updateDoc, DocumentReference, getDoc } from '@angular/fire/firestore';
 
 const RoomIdDigits: number = 5;
 
@@ -57,12 +57,20 @@ export class RoomService {
         return result;
     }
 
-    public async join(id: string, user: UserInterface): Promise<void> {
+    public async join(id: string, user: UserInterface): Promise<boolean> {
         const document = doc(this.firestore, `rooms/${id}`);
-        await updateDoc(document, {
-            [`users.${user.uid}`]: user,
-            active_at: new Date()
-        });
+        const room = await getDoc(document);
+
+        if (room.exists()) {
+            await updateDoc(document, {
+                [`users.${user.uid}`]: user,
+                active_at: new Date()
+            });
+
+            return true;
+        }
+
+        return false;
     }
 
     public async coffee(id: string, user: UserInterface, value: number): Promise<void> {

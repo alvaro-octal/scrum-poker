@@ -18,13 +18,20 @@
                     <button class="btn btn-success" (click)="showJoin = true">Join</button>
                 </div>
                 @if (showJoin) {
-                    <input
-                        type="text"
-                        class="form-control mt-2"
-                        placeholder="Type room ID..."
-                        (ngModelChange)="checkJoin($event)"
-                        [(ngModel)]="id"
-                    />
+                    <div class="mt-2" [formGroup]="form" [class.shake]="invalidCode">
+                        <div formArrayName="code" class="d-flex justify-content-between">
+                            @for (control of form.controls.code.controls; track $index) {
+                                <input
+                                    #input
+                                    class="form-control text-center"
+                                    [formControlName]="$index"
+                                    maxlength="1"
+                                    (keyup)="handleInput($event, $index)"
+                                    (paste)="handlePaste($event)"
+                                />
+                            }
+                        </div>
+                    </div>
                 }
             </div>
         } @else {
