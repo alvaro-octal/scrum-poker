@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { increment } from '@angular/fire/database';
 import { doc, docData, Firestore, setDoc, updateDoc, DocumentReference } from '@angular/fire/firestore';
 
+const RoomIdDigits: number = 5;
+
 @Injectable({
     providedIn: 'root'
 })
@@ -23,9 +25,9 @@ export class RoomService {
     }
 
     public async create(user: UserInterface): Promise<RoomCreationResult> {
-        const id: string = Math.floor(Math.random() * 10000)
+        const id: string = Math.floor(Math.random() * Math.pow(10, RoomIdDigits))
             .toString()
-            .padStart(5, '0');
+            .padStart(RoomIdDigits, '0');
 
         const result: RoundCreationResult = await this.roundService.create();
 
