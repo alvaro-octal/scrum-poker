@@ -1,6 +1,6 @@
 {
     "hosting": {
-        "public": "dist/scrum-poker",
+        "public": "dist/scrum-poker/browser",
         "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
         "rewrites": [
             {
