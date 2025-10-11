@@ -20,18 +20,18 @@ import { OptionsComponent } from '../options/options.component';
     styleUrls: ['./round.component.scss']
 })
 export class RoundComponent {
-    public voted: WritableSignal<boolean> = signal(false);
-    public session: WritableSignal<UserInterface | undefined> = signal(undefined);
-    public stats: WritableSignal<RoundStatsInterface | undefined> = signal(undefined);
+    protected voted: WritableSignal<boolean> = signal(false);
+    protected session: WritableSignal<UserInterface | undefined> = signal(undefined);
+    protected stats: WritableSignal<RoundStatsInterface | undefined> = signal(undefined);
     private _id: WritableSignal<string> = signal('');
-    public round = toSignal(
+    protected round = toSignal(
         toObservable(this._id).pipe(
             filter((id) => !!id),
             switchMap((id) => this.roundService.get(id))
         )
     );
 
-    public values: VoteValue[] = [0.5, 1, 2, 3, 5, 8, 13, 21, 34, 55, null];
+    protected values: VoteValue[] = [0.5, 1, 2, 3, 5, 8, 13, 21, 34, 55, null];
 
     @Input({ required: true }) room: RoomInterface | undefined;
     @Input({ required: true }) set id(id: string) {
@@ -82,7 +82,7 @@ export class RoundComponent {
         );
     }
 
-    public async vote(value: VoteValue): Promise<void> {
+    protected async vote(value: VoteValue): Promise<void> {
         const round = this.round();
         const session = this.session();
         if (!round) {
@@ -100,14 +100,14 @@ export class RoundComponent {
         await this.roomService.coffee(this.room?.id, session, value === null ? 10 : -5);
     }
 
-    public async resolve(): Promise<void> {
+    protected async resolve(): Promise<void> {
         const round = this.round();
         if (round) {
             await this.roundService.resolve(round.id);
         }
     }
 
-    public calculateResults(round: RoundInterface): void {
+    protected calculateResults(round: RoundInterface): void {
         const values: number[] = Object.values(round.votes)
             .map((vote: VoteInterface): number => {
                 return vote.value || -1;
@@ -139,7 +139,7 @@ export class RoundComponent {
         }
     }
 
-    public async next(): Promise<void> {
+    protected async next(): Promise<void> {
         if (!this.room) {
             console.error('No room was provided');
             return;
@@ -150,7 +150,7 @@ export class RoundComponent {
         await this.roomService.next(this.room.id);
     }
 
-    public async deleteVote(): Promise<void> {
+    protected async deleteVote(): Promise<void> {
         const id = this._id();
         const session = this.session();
         if (!id) {

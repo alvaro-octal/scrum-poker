@@ -8,7 +8,7 @@ import { Auth, signInWithPopup } from '@angular/fire/auth';
     styleUrls: ['./login.page.component.scss']
 })
 export class LoginPageComponent {
-    public message = signal('');
+    protected message = signal('');
     private messages: string[] = [
         'Now with money',
         'Such code, WOW',
@@ -16,7 +16,11 @@ export class LoginPageComponent {
         'Happy coding :)',
         'API v2, próximamente',
         'Releasing on time',
-        'Not responsive!'
+        'Not responsive!',
+        'Caffeine-powered code',
+        'Works, but why?',
+        'Debugging: needle in haystack',
+        'Code for psychopaths'
     ];
 
     private readonly auth: Auth = inject(Auth);
@@ -25,34 +29,20 @@ export class LoginPageComponent {
         this.message.set(this.messages[Math.floor(Math.random() * this.messages.length)]);
     }
 
-    public login(): void {
+    protected async login(): Promise<void> {
         const provider = new GoogleAuthProvider();
 
-        signInWithPopup(this.auth, provider)
-            .then((result) => {
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                const credential = GoogleAuthProvider.credentialFromResult(result);
+        try {
+            const result = await signInWithPopup(this.auth, provider);
 
-                if (!credential) {
-                    console.error('No credential found!', credential);
-                }
-            })
-            .catch((error) => {
-                // Handle Errors here.
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                // The email of the user's account used.
-                const email = error.email;
-                // The AuthCredential type that was used.
-                const credential = GoogleAuthProvider.credentialFromError(error);
-                // ...
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            const credential = GoogleAuthProvider.credentialFromResult(result);
 
-                console.error(error, {
-                    code: errorCode,
-                    message: errorMessage,
-                    email: email,
-                    credential: credential
-                });
-            });
+            if (!credential) {
+                console.error('No credential found!', credential);
+            }
+        } catch (error) {
+            console.error(error);
+        }
     }
 }

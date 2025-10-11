@@ -1,4 +1,4 @@
-@if (roundSignal()) {
+@if (round()) {
     <table class="table mb-0">
         <tbody>
             @if (session()) {
@@ -6,7 +6,7 @@
                     <td class="table-light">
                         <app-user-horizontal
                             [user]="session()!"
-                            [check]="!!roundSignal()?.votes?.[session()!.uid]"
+                            [check]="!!round()?.votes?.[session()!.uid]"
                         ></app-user-horizontal>
                     </td>
                 </tr>
@@ -14,10 +14,7 @@
             @for (user of users(); track user) {
                 <tr>
                     <td>
-                        <app-user-horizontal
-                            [user]="user"
-                            [check]="!!roundSignal()?.votes?.[user.uid]"
-                        ></app-user-horizontal>
+                        <app-user-horizontal [user]="user" [check]="!!round()?.votes?.[user.uid]"></app-user-horizontal>
                     </td>
                 </tr>
             }

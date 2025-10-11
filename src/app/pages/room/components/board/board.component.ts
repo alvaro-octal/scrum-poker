@@ -13,11 +13,11 @@ import { RoundInterface } from '../../../../interfaces/room/round/round.interfac
     styleUrls: ['./board.component.scss']
 })
 export class BoardComponent {
-    public id: WritableSignal<string> = signal('');
-    public round: Signal<RoundInterface | undefined> = toSignal(
+    protected id: WritableSignal<string> = signal('');
+    protected round: Signal<RoundInterface | undefined> = toSignal(
         toObservable(this.id).pipe(switchMap((id: string): Observable<RoundInterface> => this.roundService.get(id)))
     );
-    public votes: Signal<VoteInterface[]> = computed((): VoteInterface[] => {
+    protected votes: Signal<VoteInterface[]> = computed((): VoteInterface[] => {
         const round: RoundInterface | undefined = this.round();
 
         if (!round) {

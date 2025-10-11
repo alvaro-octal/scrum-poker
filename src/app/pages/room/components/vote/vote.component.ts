@@ -9,8 +9,8 @@ import { OptionRendererPipe } from '../../../../pipes/option/option.renderer.pip
     styleUrls: ['./vote.component.scss']
 })
 export class VoteComponent implements OnInit {
-    public initials: WritableSignal<string | undefined> = signal(undefined);
-    public corporate: WritableSignal<boolean | undefined> = signal(undefined);
+    protected initials: WritableSignal<string | undefined> = signal(undefined);
+    protected corporate: WritableSignal<boolean | undefined> = signal(undefined);
 
     @Input({ required: true }) vote: VoteInterface | undefined;
     @Input({ required: true }) flipped: boolean | undefined;

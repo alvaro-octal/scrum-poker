@@ -11,10 +11,10 @@ import { OptionRendererPipe } from '../../../../pipes/option/option.renderer.pip
     styleUrls: ['./options.component.scss']
 })
 export class OptionsComponent {
-    public fadeout = signal(false);
-    public optionSelected: WritableSignal<VoteValue | undefined> = signal(undefined);
-    public options: WritableSignal<VoteValue[]> = signal([]);
-    public rumble = computed(() => {
+    protected fadeout = signal(false);
+    protected optionSelected: WritableSignal<VoteValue | undefined> = signal(undefined);
+    protected options: WritableSignal<VoteValue[]> = signal([]);
+    protected rumble = computed(() => {
         const room = this._room();
         const session = this._session();
         if (!session || !room) {
@@ -71,7 +71,7 @@ export class OptionsComponent {
         );
     }
 
-    public onOptionSelected(value: VoteValue): void {
+    protected onOptionSelected(value: VoteValue): void {
         if (this.optionSelected()) {
             return;
         }

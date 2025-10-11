@@ -13,10 +13,11 @@ import { switchMap } from 'rxjs';
     styleUrls: ['./presence.component.scss']
 })
 export class PresenceComponent {
-    public session: WritableSignal<UserInterface | undefined> = signal(undefined);
     public users = input<UserInterface[] | undefined>(undefined);
-    public round = input.required<string>();
-    public roundSignal = toSignal(toObservable(this.round).pipe(switchMap((round) => this.roundService.get(round))));
+    public roundId = input.required<string>();
+
+    protected session: WritableSignal<UserInterface | undefined> = signal(undefined);
+    protected round = toSignal(toObservable(this.roundId).pipe(switchMap((round) => this.roundService.get(round))));
 
     private readonly auth: Auth = inject(Auth);
     private readonly roundService: RoundService = inject(RoundService);

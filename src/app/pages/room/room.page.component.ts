@@ -17,9 +17,9 @@ import { switchMap } from 'rxjs';
     styleUrls: ['./room.page.component.scss']
 })
 export class RoomPageComponent {
-    public session: WritableSignal<UserInterface | undefined> = signal(undefined);
-    public room: Signal<RoomInterface | undefined>;
-    public roundId = computed(() => {
+    protected session: WritableSignal<UserInterface | undefined> = signal(undefined);
+    protected room: Signal<RoomInterface | undefined>;
+    protected roundId = computed(() => {
         const room = this.room();
         if (room) {
             const { key } = Helpers.DestructureDocumentPath(room.round.path);
@@ -28,7 +28,7 @@ export class RoomPageComponent {
         return undefined;
     });
 
-    public users = computed(() => {
+    protected users = computed(() => {
         const room = this.room();
         const session = this.session();
         if (room && session) {

@@ -6,8 +6,8 @@
             <app-board [idInput]="round()!.id"></app-board>
         </div>
         <div class="footer-container mt-2">
-            <!-- Cards -->
             @if (!voted() && !stats()) {
+                <!-- Cards -->
                 <div class="d-flex justify-content-center flex-wrap">
                     <app-options
                         [session]="session()"
@@ -16,9 +16,8 @@
                         (selected)="vote($event)"
                     ></app-options>
                 </div>
-            }
-            <!-- Resolve or Wait -->
-            @if (voted() && !stats()) {
+            } @else if (voted() && !stats()) {
+                <!-- Resolve or Wait -->
                 <div class="d-flex justify-content-center h-100">
                     <div class="d-flex justify-content-center w-100">
                         @if (room?.owner?.uid !== session()?.uid) {
@@ -33,9 +32,8 @@
                         }
                     </div>
                 </div>
-            }
-            <!-- Stats -->
-            @if (stats()) {
+            } @else if (stats()) {
+                <!-- Stats -->
                 <div class="d-flex justify-content-center h-100">
                     <div class="d-flex justify-content-between w-100">
                         <div>
