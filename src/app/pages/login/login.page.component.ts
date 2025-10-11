@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { Auth, signInWithPopup } from '@angular/fire/auth';
 
@@ -8,7 +8,7 @@ import { Auth, signInWithPopup } from '@angular/fire/auth';
     styleUrls: ['./login.page.component.scss']
 })
 export class LoginPageComponent {
-    public message: string;
+    public message = signal('');
     private messages: string[] = [
         'Now with money',
         'Such code, WOW',
@@ -22,7 +22,7 @@ export class LoginPageComponent {
     private readonly auth: Auth = inject(Auth);
 
     constructor() {
-        this.message = this.messages[Math.floor(Math.random() * this.messages.length)];
+        this.message.set(this.messages[Math.floor(Math.random() * this.messages.length)]);
     }
 
     public login(): void {

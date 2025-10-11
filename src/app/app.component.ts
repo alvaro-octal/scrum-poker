@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class AppComponent {
     protected originalURL: string;
-    protected isLoggedIn: boolean = false;
+    protected isLoggedIn = signal(false);
 
     private readonly router: Router = inject(Router);
     private readonly auth: Auth = inject(Auth);
@@ -22,14 +22,14 @@ export class AppComponent {
 
         this.auth.onAuthStateChanged(async (user): Promise<void> => {
             if (user) {
-                this.isLoggedIn = true;
+                this.isLoggedIn.set(true);
                 if (this.originalURL.startsWith('/room')) {
                     await this.router.navigateByUrl(this.originalURL);
                 } else {
                     await this.router.navigateByUrl('/');
                 }
             } else {
-                this.isLoggedIn = false;
+                this.isLoggedIn.set(false);
                 await this.router.navigateByUrl('/login');
             }
         });

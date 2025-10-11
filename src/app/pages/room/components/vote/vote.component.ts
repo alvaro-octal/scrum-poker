@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, signal, WritableSignal } from '@angular/core';
 import { VoteInterface } from '../../../../interfaces/room/round/vote/vote.interface';
 import { OptionRendererPipe } from '../../../../pipes/option/option.renderer.pipe';
 
@@ -9,8 +9,8 @@ import { OptionRendererPipe } from '../../../../pipes/option/option.renderer.pip
     styleUrls: ['./vote.component.scss']
 })
 export class VoteComponent implements OnInit {
-    public initials: string | undefined;
-    public corporate: boolean | undefined;
+    public initials: WritableSignal<string | undefined> = signal(undefined);
+    public corporate: WritableSignal<boolean | undefined> = signal(undefined);
 
     @Input({ required: true }) vote: VoteInterface | undefined;
     @Input({ required: true }) flipped: boolean | undefined;
@@ -31,8 +31,8 @@ export class VoteComponent implements OnInit {
             initials += ` ${names[names.length - 1].substring(0, 5).toUpperCase()}`;
         }
 
-        this.corporate = !this.vote.user.email?.endsWith('@gmail.com');
+        this.corporate.set(!this.vote.user.email?.endsWith('@gmail.com'));
 
-        this.initials = initials;
+        this.initials.set(initials);
     }
 }

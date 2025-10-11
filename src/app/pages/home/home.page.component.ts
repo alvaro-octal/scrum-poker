@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, inject, QueryList, signal, ViewChildren } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { RoomCreationResult, RoomService } from '../../services/room/room.service';
 import { UserInterface } from '../../interfaces/user/user.interface';
@@ -12,9 +12,9 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular
     styleUrls: ['./home.page.component.scss']
 })
 export class HomePageComponent {
-    protected showJoin: boolean = false;
-    protected session: UserInterface | undefined;
-    protected invalidCode: boolean = false;
+    protected showJoin = signal(false);
+    protected session = signal<UserInterface | undefined>(undefined);
+    protected invalidCode = signal(false);
 
     protected form = new FormGroup({
         code: new FormArray([
@@ -35,12 +35,12 @@ export class HomePageComponent {
     constructor() {
         this.auth.onAuthStateChanged((user): void => {
             if (user) {
-                this.session = {
+                this.session.set({
                     uid: user.uid,
                     displayName: user.displayName,
                     email: user.email,
                     photoURL: user.photoURL
-                };
+                });
             } else {
                 console.error('Auth did not returned user');
             }
@@ -48,8 +48,9 @@ export class HomePageComponent {
     }
 
     protected async createRoom(): Promise<void> {
-        if (this.session) {
-            const result: RoomCreationResult = await this.roomService.create(this.session);
+        const session = this.session();
+        if (session) {
+            const result: RoomCreationResult = await this.roomService.create(session);
 
             await this.router.navigateByUrl(`/room/${result.id}`);
         } else {
@@ -61,21 +62,21 @@ export class HomePageComponent {
         if (!id) {
             console.error('No id provided!');
             return;
-        } else if (!this.session) {
+        } else if (!this.session()) {
             console.error('You mush be logged in to create a room');
             return;
         }
 
-        const result: boolean = await this.roomService.join(id, this.session);
+        const result: boolean = await this.roomService.join(id, this.session() as UserInterface);
 
         if (result) {
             await this.router.navigateByUrl(`/room/${id}`);
         } else {
-            this.invalidCode = true;
+            this.invalidCode.set(true);
             this.form.reset();
             this.inputs.first.nativeElement.focus();
             setTimeout(() => {
-                this.invalidCode = false;
+                this.invalidCode.set(false);
             }, 500);
         }
     }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, computed, effect, EventEmitter, Input, Output, signal, WritableSignal } from '@angular/core';
 import { VoteValue } from '../../../../interfaces/room/round/vote/vote.interface';
 import { UserInterface } from '../../../../interfaces/user/user.interface';
 import { RoomInterface } from '../../../../interfaces/room/room.interface';
@@ -11,44 +11,60 @@ import { OptionRendererPipe } from '../../../../pipes/option/option.renderer.pip
     styleUrls: ['./options.component.scss']
 })
 export class OptionsComponent {
-    public fadeout: boolean = false;
-    public optionSelected: VoteValue | undefined;
-    public options: VoteValue[] | undefined;
-    public rumble: string | undefined;
+    public fadeout = signal(false);
+    public optionSelected: WritableSignal<VoteValue | undefined> = signal(undefined);
+    public options: WritableSignal<VoteValue[]> = signal([]);
+    public rumble = computed(() => {
+        const room = this._room();
+        const session = this._session();
+        if (!session || !room) {
+            return undefined;
+        }
 
-    private _session: UserInterface | undefined;
-    private _room: RoomInterface | undefined;
+        const value: number | undefined = room.coffees[session.uid];
+
+        if (!value) {
+            return undefined;
+        } else {
+            return `rumble-${Math.min(value, 30)}`;
+        }
+    });
+
+    private _session: WritableSignal<UserInterface | undefined> = signal(undefined);
+    private _room: WritableSignal<RoomInterface | undefined> = signal(undefined);
+    private _values: WritableSignal<VoteValue[] | undefined> = signal(undefined);
 
     @Input({ required: true }) set session(value: UserInterface | undefined) {
-        this._session = value;
-        this.calculateRumble(this._session, this._room);
+        this._session.set(value);
     }
     @Input({ required: true }) set room(value: RoomInterface | undefined) {
-        this._room = value;
-        this.calculateRumble(this._session, this._room);
+        this._room.set(value);
     }
     @Input({ required: true }) set values(values: VoteValue[] | undefined) {
-        this.options = [];
-
-        if (!values) {
-            return;
-        }
-
-        for (let index = 0; index < values.length; index++) {
-            setTimeout((): void => {
-                this.options?.push(values[index]);
-            }, 25 * index);
-        }
+        this._values.set(values);
     }
     @Output() selected = new EventEmitter<VoteValue>();
+
     constructor() {
+        effect(() => {
+            const values = this._values();
+            this.options.set([]);
+            if (values) {
+                for (let index = 0; index < values.length; index++) {
+                    setTimeout((): void => {
+                        this.options.update((options) => [...options, values[index]]);
+                    }, 25 * index);
+                }
+            }
+        });
+
         document.addEventListener(
             'keydown',
             (event: KeyboardEvent): void => {
                 const index: number = Number(event.key);
 
-                if (!Number.isNaN(index) && this.options && this.options[index] !== undefined) {
-                    this.fadeoutAndEmit(this.options[index]);
+                if (!Number.isNaN(index) && this.options() && this.options()[index] !== undefined) {
+                    this.fadeoutAndEmit(this.options()[index]);
                 }
             },
             false
@@ -56,36 +72,20 @@ export class OptionsComponent {
     }
 
     public onOptionSelected(value: VoteValue): void {
-        if (this.optionSelected) {
+        if (this.optionSelected()) {
             return;
         }
 
-        this.optionSelected = value;
+        this.optionSelected.set(value);
         setTimeout((): void => {
             this.fadeoutAndEmit(value);
         }, 250);
     }
 
     private fadeoutAndEmit(value: VoteValue): void {
-        this.fadeout = true;
+        this.fadeout.set(true);
         setTimeout((): void => {
             this.selected.emit(value);
         }, 250);
-    }
-
-    private calculateRumble(user: UserInterface | undefined, room: RoomInterface | undefined): void {
-        if (!user) {
-            return;
-        } else if (!room) {
-            return;
-        }
-
-        const value: number | undefined = room.coffees[user.uid];
-
-        if (!value) {
-            this.rumble = undefined;
-        } else {
-            this.rumble = `rumble-${Math.min(value, 30)}`;
-        }
     }
 }

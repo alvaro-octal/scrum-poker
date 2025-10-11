@@ -1,4 +1,5 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, effect, inject, Input, signal, WritableSignal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { RoundInterface } from '../../../../interfaces/room/round/round.interface';
 import { VoteInterface, VoteValue } from '../../../../interfaces/room/round/vote/vote.interface';
 import { RoomInterface } from '../../../../interfaces/room/room.interface';
@@ -6,32 +7,35 @@ import { RoomService } from '../../../../services/room/room.service';
 import { RoundService } from '../../../../services/round/round.service';
 import { Auth } from '@angular/fire/auth';
 import { UserInterface } from '../../../../interfaces/user/user.interface';
-import { Observable } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
 import confetti from 'canvas-confetti';
 import { BoardComponent } from '../board/board.component';
-import { AsyncPipe, DecimalPipe } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { OptionsComponent } from '../options/options.component';
 
 @Component({
     selector: 'app-round',
     templateUrl: './round.component.html',
-    imports: [BoardComponent, AsyncPipe, OptionsComponent, DecimalPipe],
+    imports: [BoardComponent, OptionsComponent, DecimalPipe],
     styleUrls: ['./round.component.scss']
 })
 export class RoundComponent {
-    public voted: boolean = false;
-    public round$: Observable<RoundInterface> | undefined;
-    public session: UserInterface | undefined;
-    public stats: RoundStatsInterface | undefined;
-    private _id: string | undefined;
-    private _round: RoundInterface | undefined;
+    public voted: WritableSignal<boolean> = signal(false);
+    public session: WritableSignal<UserInterface | undefined> = signal(undefined);
+    public stats: WritableSignal<RoundStatsInterface | undefined> = signal(undefined);
+    private _id: WritableSignal<string> = signal('');
+    public round = toSignal(
+        toObservable(this._id).pipe(
+            filter((id) => !!id),
+            switchMap((id) => this.roundService.get(id))
+        )
+    );
 
     public values: VoteValue[] = [0.5, 1, 2, 3, 5, 8, 13, 21, 34, 55, null];
 
     @Input({ required: true }) room: RoomInterface | undefined;
     @Input({ required: true }) set id(id: string) {
-        this._id = id;
-        this.refresh(id);
+        this._id.set(id);
     }
     private readonly auth: Auth = inject(Auth);
     private readonly roomService: RoomService = inject(RoomService);
@@ -40,14 +44,27 @@ export class RoundComponent {
     constructor() {
         this.auth.onAuthStateChanged((user): void => {
             if (user) {
-                this.session = {
+                this.session.set({
                     uid: user.uid,
                     displayName: user.displayName,
                     email: user.email,
                     photoURL: user.photoURL
-                };
+                });
             } else {
                 console.error('Auth did not returned user');
+            }
+        });
+
+        effect(() => {
+            const round = this.round();
+            if (round) {
+                this.voted.set(Object.prototype.hasOwnProperty.call(round.votes, this.session()?.uid || ''));
+
+                if (round.resolved) {
+                    this.calculateResults(round);
+                } else {
+                    this.stats.set(undefined);
+                }
             }
         });
 
@@ -55,7 +72,8 @@ export class RoundComponent {
             'keydown',
             async (event: KeyboardEvent): Promise<void> => {
                 if (event.code === 'Escape') {
-                    if (this._round && !this._round.resolved) {
+                    const round = this.round();
+                    if (round && !round.resolved) {
                         await this.deleteVote();
                     }
                 }
@@ -64,28 +82,13 @@ export class RoundComponent {
         );
     }
 
-    private refresh(id: string | undefined = this._id): void {
-        if (!id) {
-            console.error('No round id provided');
+    public async vote(value: VoteValue): Promise<void> {
+        const round = this.round();
+        const session = this.session();
+        if (!round) {
+            console.error('No round was found');
             return;
-        }
-
-        this.round$ = this.roundService.get(id);
-        this.round$.subscribe((round: RoundInterface): void => {
-            this._round = round;
-
-            this.voted = Object.prototype.hasOwnProperty.call(round.votes, this.session?.uid || '');
-
-            if (round.resolved) {
-                this.calculateResults(round);
-            } else {
-                this.stats = undefined;
-            }
-        });
-    }
-
-    public async vote(round: RoundInterface, value: VoteValue): Promise<void> {
-        if (!this.session) {
+        } else if (!session) {
             console.error('No session was found');
             return;
         } else if (!this.room?.id) {
@@ -93,12 +96,15 @@ export class RoundComponent {
             return;
         }
 
-        await this.roundService.vote(round.id, this.session, value);
-        await this.roomService.coffee(this.room?.id, this.session, value === null ? 10 : -5);
+        await this.roundService.vote(round.id, session, value);
+        await this.roomService.coffee(this.room?.id, session, value === null ? 10 : -5);
     }
 
-    public async resolve(round: RoundInterface): Promise<void> {
-        await this.roundService.resolve(round.id);
+    public async resolve(): Promise<void> {
+        const round = this.round();
+        if (round) {
+            await this.roundService.resolve(round.id);
+        }
     }
 
     public calculateResults(round: RoundInterface): void {
@@ -122,11 +128,11 @@ export class RoundComponent {
             );
         }
 
-        this.stats = {
+        this.stats.set({
             count: values.length,
             avg: avg,
             std: std
-        };
+        });
 
         if (std === 0 && values.length > 1) {
             this.launchConfetti();
@@ -139,21 +145,23 @@ export class RoundComponent {
             return;
         }
 
-        this.stats = undefined;
+        this.stats.set(undefined);
 
         await this.roomService.next(this.room.id);
     }
 
     public async deleteVote(): Promise<void> {
-        if (!this._id) {
+        const id = this._id();
+        const session = this.session();
+        if (!id) {
             console.error('Round Id was not provided');
             return;
-        } else if (!this.session) {
+        } else if (!session) {
             console.error('No session was found');
             return;
         }
 
-        await this.roundService.deleteVote(this._id, this.session);
+        await this.roundService.deleteVote(id, session);
     }
 
     private launchConfetti(): void {

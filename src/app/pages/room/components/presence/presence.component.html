@@ -1,20 +1,23 @@
-@if (round$ | async; as round) {
+@if (roundSignal()) {
     <table class="table mb-0">
         <tbody>
-            @if (session) {
+            @if (session()) {
                 <tr>
                     <td class="table-light">
                         <app-user-horizontal
-                            [user]="session"
-                            [check]="!!round.votes[session.uid]"
+                            [user]="session()!"
+                            [check]="!!roundSignal()?.votes?.[session()!.uid]"
                         ></app-user-horizontal>
                     </td>
                 </tr>
             }
-            @for (user of users; track user) {
+            @for (user of users(); track user) {
                 <tr>
                     <td>
-                        <app-user-horizontal [user]="user" [check]="!!round.votes[user.uid]"></app-user-horizontal>
+                        <app-user-horizontal
+                            [user]="user"
+                            [check]="!!roundSignal()?.votes?.[user.uid]"
+                        ></app-user-horizontal>
                     </td>
                 </tr>
             }

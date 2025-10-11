@@ -1,28 +1,26 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { PresenceInterface, PresenceService } from '../../services/presence/presence.service';
-import { Observable } from 'rxjs';
+import { Component, inject, input } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { PresenceService } from '../../services/presence/presence.service';
 import { UserInterface } from '../../interfaces/user/user.interface';
-import { AsyncPipe, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
+import { filter, switchMap } from 'rxjs';
 
 @Component({
     selector: 'app-user-horizontal',
     templateUrl: './user-horizontal.component.html',
-    imports: [NgClass, AsyncPipe],
+    imports: [NgClass],
     styleUrls: ['./user-horizontal.component.scss']
 })
-export class UserHorizontalComponent implements OnInit {
-    public presence$: Observable<PresenceInterface> | undefined;
+export class UserHorizontalComponent {
+    public user = input.required<UserInterface>();
+    public presence = toSignal(
+        toObservable(this.user).pipe(
+            filter((user): user is UserInterface => !!user),
+            switchMap((user) => this.presenceService.getPresence(user.uid))
+        )
+    );
 
-    @Input({ required: true }) user: UserInterface | undefined;
-    @Input({ required: true }) check: boolean = false;
+    public check = input(false);
 
-    private readonly presence: PresenceService = inject(PresenceService);
-
-    ngOnInit() {
-        if (this.user) {
-            this.presence$ = this.presence.getPresence(this.user.uid);
-        } else {
-            console.error('No UID provided to user component');
-        }
-    }
+    private readonly presenceService: PresenceService = inject(PresenceService);
 }

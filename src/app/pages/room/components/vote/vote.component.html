@@ -1,14 +1,14 @@
 @if (vote) {
     <div class="vote" [class.flipped]="flipped">
         <div class="back"></div>
-        <div class="front" [class.front-corporate]="corporate">
+        <div class="front" [class.front-corporate]="corporate()">
             <div class="front-content d-flex justify-content-center align-items-center">
                 <div class="value">{{ vote.value | optionRenderer }}</div>
-                @if (initials) {
-                    <div class="suit top">{{ initials }}</div>
+                @if (initials()) {
+                    <div class="suit top">{{ initials() }}</div>
                 }
-                @if (initials) {
-                    <div class="suit bottom">{{ initials }}</div>
+                @if (initials()) {
+                    <div class="suit bottom">{{ initials() }}</div>
                 }
             </div>
         </div>

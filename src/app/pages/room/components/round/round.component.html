@@ -1,52 +1,52 @@
 <canvas class="position-absolute w-100 h-100" style="z-index: 1000; pointer-events: none"></canvas>
-@if (round$ | async; as round) {
+@if (round()) {
     <div class="h-100">
         <!-- Board -->
         <div class="board-container">
-            <app-board [id]="round.id"></app-board>
+            <app-board [idInput]="round()!.id"></app-board>
         </div>
         <div class="footer-container mt-2">
             <!-- Cards -->
-            @if (!voted && !stats) {
+            @if (!voted() && !stats()) {
                 <div class="d-flex justify-content-center flex-wrap">
                     <app-options
-                        [session]="session"
+                        [session]="session()"
                         [room]="room"
                         [values]="values"
-                        (selected)="vote(round, $event)"
+                        (selected)="vote($event)"
                     ></app-options>
                 </div>
             }
             <!-- Resolve or Wait -->
-            @if (voted && !stats) {
+            @if (voted() && !stats()) {
                 <div class="d-flex justify-content-center h-100">
                     <div class="d-flex justify-content-center w-100">
-                        @if (room?.owner?.uid !== session?.uid) {
+                        @if (room?.owner?.uid !== session()?.uid) {
                             <div class="align-self-center text-black-50">
                                 Waiting for resolution... press ESC to change your vote.
                             </div>
                         }
-                        @if (room?.owner?.uid === session?.uid) {
+                        @if (room?.owner?.uid === session()?.uid) {
                             <div class="align-self-center">
-                                <button type="button" class="btn btn-primary" (click)="resolve(round)">Resolve</button>
+                                <button type="button" class="btn btn-primary" (click)="resolve()">Resolve</button>
                             </div>
                         }
                     </div>
                 </div>
             }
             <!-- Stats -->
-            @if (stats) {
+            @if (stats()) {
                 <div class="d-flex justify-content-center h-100">
                     <div class="d-flex justify-content-between w-100">
                         <div>
                             <ul>
-                                <li><span class="fw-bold">Votes</span>: {{ stats.count }}</li>
-                                <li><span class="fw-bold">AVG</span>: {{ stats.avg | number: '1.0-1' }}</li>
-                                <li><span class="fw-bold">STD</span>: {{ stats.std | number: '1.0-1' }}</li>
+                                <li><span class="fw-bold">Votes</span>: {{ stats()?.count }}</li>
+                                <li><span class="fw-bold">AVG</span>: {{ stats()?.avg | number: '1.0-1' }}</li>
+                                <li><span class="fw-bold">STD</span>: {{ stats()?.std | number: '1.0-1' }}</li>
                             </ul>
                         </div>
                         <div class="d-flex align-items-center">
-                            @if (room?.owner?.uid === session?.uid) {
+                            @if (room?.owner?.uid === session()?.uid) {
                                 <button type="button" class="btn btn-primary" (click)="next()">Next Round</button>
                             }
                         </div>
