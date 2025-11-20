@@ -1,29 +1,31 @@
 .logout {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  background-color: transparent;
-  border: 2px solid #d9534f;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s, fill 0.3s;
-
-  svg {
-    fill: #d9534f;
-    transition: fill 0.3s;
-  }
-
-  &:hover {
-    background-color: #d9534f;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background-color: transparent;
+    border: 2px solid #d9534f;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition:
+        background-color 0.3s,
+        fill 0.3s;
 
     svg {
-      fill: #FFFFFF;
+        fill: #d9534f;
+        transition: fill 0.3s;
     }
-  }
+
+    &:hover {
+        background-color: #d9534f;
+
+        svg {
+            fill: #ffffff;
+        }
+    }
 }

@@ -1,45 +1,34 @@
-@if (user) {
-  <div>
-    <div class="card">
-      @if (user.photoURL) {
-        <img
-          class="img-fluid m-1 rounded"
-          [src]="user.photoURL"
-          [alt]="user.displayName || 'UNKNOWN'"
-          />
-        }@if (presence$ | async; as presence) {
-        <span
-      class="
-        position-absolute
-        top-0
-        start-100
-        translate-middle
-        p-2
-        border border-light
-        rounded-circle
-      "
-      [ngClass]="{
-        'bg-success': presence.status === 'online',
-        'bg-warning': presence.status === 'away',
-        'bg-dark': presence.status === 'offline'
-      }"
-          >
-          <span class="visually-hidden">{{ presence.status }}</span>
-        </span>
-      }
-      <div class="card-body text-center p-1">
-        @if (user.displayName) {
-          <span class="user-name">
-            {{ user.displayName }}
-          </span>
-        }
-        @if (!user.displayName) {
-          <span class="text-black-50">UNKNOWN</span>
-        }
-      </div>
+@if (user()) {
+    <div>
+        <div class="card">
+            @if (user()?.photoURL) {
+                <img class="img-fluid m-1 rounded" [src]="user()?.photoURL" [alt]="user()?.displayName || 'UNKNOWN'" />
+            }
+            @if (presence()) {
+                <span
+                    class="position-absolute top-0 start-100 translate-middle p-2 border border-light rounded-circle"
+                    [ngClass]="{
+                        'bg-success': presence()?.status === 'online',
+                        'bg-warning': presence()?.status === 'away',
+                        'bg-dark': presence()?.status === 'offline'
+                    }"
+                >
+                    <span class="visually-hidden">{{ presence()?.status }}</span>
+                </span>
+            }
+            <div class="card-body text-center p-1">
+                @if (user()?.displayName) {
+                    <span class="user-name">
+                        {{ user()?.displayName }}
+                    </span>
+                }
+                @if (!user()?.displayName) {
+                    <span class="text-black-50">UNKNOWN</span>
+                }
+            </div>
+        </div>
     </div>
-  </div>
 }
-@if (!user) {
-  <div>LOADING...</div>
+@if (!user()) {
+    <div>LOADING...</div>
 }

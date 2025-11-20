@@ -1,25 +1,25 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, input, InputSignal, Signal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { PresenceInterface, PresenceService } from '../../services/presence/presence.service';
-import { Observable } from 'rxjs';
 import { UserInterface } from '../../interfaces/user/user.interface';
+import { NgClass } from '@angular/common';
+import { filter, switchMap } from 'rxjs';
 
 @Component({
     selector: 'app-user-vertical',
     templateUrl: './user-vertical.component.html',
+    imports: [NgClass],
     styleUrls: ['./user-vertical.component.scss']
 })
-export class UserVerticalComponent implements OnInit {
-    public presence$: Observable<PresenceInterface> | undefined;
+export class UserVerticalComponent {
+    protected user: InputSignal<UserInterface> = input.required<UserInterface>();
 
-    @Input({ required: true }) user: UserInterface | undefined;
+    protected presence: Signal<PresenceInterface | undefined> = toSignal(
+        toObservable(this.user).pipe(
+            filter((user): user is UserInterface => !!user),
+            switchMap((user) => this.presenceService.getPresence(user.uid))
+        )
+    );
 
-    private readonly presence: PresenceService = inject(PresenceService);
-
-    ngOnInit() {
-        if (this.user) {
-            this.presence$ = this.presence.getPresence(this.user.uid);
-        } else {
-            console.error('No UID provided to user component');
-        }
-    }
+    private readonly presenceService: PresenceService = inject(PresenceService);
 }
