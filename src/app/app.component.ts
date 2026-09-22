@@ -1,13 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { Router, RouterOutlet } from '@angular/router';
-import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-root',
     standalone: true,
     templateUrl: './app.component.html',
-    imports: [RouterOutlet, CommonModule],
+    imports: [RouterOutlet],
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
