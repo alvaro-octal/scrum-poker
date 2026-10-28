@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, Input, OnInit, signal, WritableSignal, ChangeDetectionStrategy } from '@angular/core';
 import { VoteInterface } from '../../../../interfaces/room/round/vote/vote.interface';
 import { OptionRendererPipe } from '../../../../pipes/option/option.renderer.pipe';
 
@@ -6,6 +6,7 @@ import { OptionRendererPipe } from '../../../../pipes/option/option.renderer.pip
     selector: 'app-vote',
     templateUrl: './vote.component.html',
     imports: [OptionRendererPipe],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./vote.component.scss']
 })
 export class VoteComponent implements OnInit {

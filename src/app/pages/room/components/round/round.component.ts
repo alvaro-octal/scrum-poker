@@ -1,4 +1,4 @@
-import { Component, effect, inject, Input, signal, WritableSignal } from '@angular/core';
+import { Component, effect, inject, Input, signal, WritableSignal, ChangeDetectionStrategy } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { RoundInterface } from '../../../../interfaces/room/round/round.interface';
 import { VoteInterface, VoteValue } from '../../../../interfaces/room/round/vote/vote.interface';
@@ -17,6 +17,7 @@ import { OptionsComponent } from '../options/options.component';
     selector: 'app-round',
     templateUrl: './round.component.html',
     imports: [BoardComponent, OptionsComponent, DecimalPipe],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./round.component.scss']
 })
 export class RoundComponent {

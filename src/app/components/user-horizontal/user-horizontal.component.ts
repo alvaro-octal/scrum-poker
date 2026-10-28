@@ -1,4 +1,4 @@
-import { Component, inject, input, InputSignal, Signal } from '@angular/core';
+import { Component, inject, input, InputSignal, Signal, ChangeDetectionStrategy } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { PresenceInterface, PresenceService } from '../../services/presence/presence.service';
 import { UserInterface } from '../../interfaces/user/user.interface';
@@ -9,6 +9,7 @@ import { filter, switchMap } from 'rxjs';
     selector: 'app-user-horizontal',
     templateUrl: './user-horizontal.component.html',
     imports: [NgClass],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./user-horizontal.component.scss']
 })
 export class UserHorizontalComponent {

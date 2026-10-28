@@ -1,4 +1,4 @@
-import { Component, inject, input, signal, WritableSignal } from '@angular/core';
+import { Component, inject, input, signal, WritableSignal, ChangeDetectionStrategy } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Auth } from '@angular/fire/auth';
 import { UserInterface } from '../../../../interfaces/user/user.interface';
@@ -10,6 +10,7 @@ import { switchMap } from 'rxjs';
     selector: 'app-presence',
     templateUrl: './presence.component.html',
     imports: [UserHorizontalComponent],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./presence.component.scss']
 })
 export class PresenceComponent {

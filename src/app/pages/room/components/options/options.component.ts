@@ -1,4 +1,14 @@
-import { Component, computed, effect, EventEmitter, Input, Output, signal, WritableSignal } from '@angular/core';
+import {
+    Component,
+    computed,
+    effect,
+    EventEmitter,
+    Input,
+    Output,
+    signal,
+    WritableSignal,
+    ChangeDetectionStrategy
+} from '@angular/core';
 import { VoteValue } from '../../../../interfaces/room/round/vote/vote.interface';
 import { UserInterface } from '../../../../interfaces/user/user.interface';
 import { RoomInterface } from '../../../../interfaces/room/room.interface';
@@ -8,6 +18,7 @@ import { OptionRendererPipe } from '../../../../pipes/option/option.renderer.pip
     selector: 'app-options',
     templateUrl: './options.component.html',
     imports: [OptionRendererPipe],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./options.component.scss']
 })
 export class OptionsComponent {

@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
 import { FirebaseApp, initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
@@ -16,6 +16,6 @@ export const AppConfig: ApplicationConfig = {
         provideFirestore((): Firestore => getFirestore()),
         provideDatabase((): Database => getDatabase()),
         provideAuth(() => getAuth()),
-        provideHttpClient()
+        provideHttpClient(withXhr())
     ]
 };

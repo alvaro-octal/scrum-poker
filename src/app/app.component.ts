@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { Router, RouterOutlet } from '@angular/router';
 
@@ -7,6 +7,7 @@ import { Router, RouterOutlet } from '@angular/router';
     standalone: true,
     templateUrl: './app.component.html',
     imports: [RouterOutlet],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
