@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, QueryList, signal, ViewChildren, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ElementRef, inject, QueryList, signal, ViewChildren } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { RoomCreationResult, RoomService } from '../../services/room/room.service';
 import { UserInterface } from '../../interfaces/user/user.interface';
@@ -9,7 +9,6 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular
     selector: 'app-home',
     templateUrl: './home.page.component.html',
     imports: [ReactiveFormsModule],
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./home.page.component.scss']
 })
 export class HomePageComponent {

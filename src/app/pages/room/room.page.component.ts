@@ -1,13 +1,4 @@
-import {
-    Component,
-    computed,
-    effect,
-    inject,
-    signal,
-    Signal,
-    WritableSignal,
-    ChangeDetectionStrategy
-} from '@angular/core';
+import { Component, computed, effect, inject, signal, Signal, WritableSignal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RoomService } from '../../services/room/room.service';
 import { RoomInterface } from '../../interfaces/room/room.interface';
@@ -23,7 +14,6 @@ import { switchMap } from 'rxjs';
     selector: 'app-room-page',
     templateUrl: './room.page.component.html',
     imports: [PresenceComponent, RoundComponent],
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./room.page.component.scss']
 })
 export class RoomPageComponent {

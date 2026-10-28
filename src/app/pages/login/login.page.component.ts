@@ -1,11 +1,10 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { Auth, signInWithPopup } from '@angular/fire/auth';
 
 @Component({
     selector: 'app-login-page',
     templateUrl: './login.page.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./login.page.component.scss']
 })
 export class LoginPageComponent {

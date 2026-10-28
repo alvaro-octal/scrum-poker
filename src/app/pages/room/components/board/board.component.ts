@@ -1,13 +1,4 @@
-import {
-    Component,
-    computed,
-    inject,
-    Input,
-    Signal,
-    signal,
-    WritableSignal,
-    ChangeDetectionStrategy
-} from '@angular/core';
+import { Component, computed, inject, Input, Signal, signal, WritableSignal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { RoundService } from '../../../../services/round/round.service';
 import { VoteInterface } from '../../../../interfaces/room/round/vote/vote.interface';
@@ -19,7 +10,6 @@ import { RoundInterface } from '../../../../interfaces/room/round/round.interfac
     selector: 'app-board',
     templateUrl: './board.component.html',
     imports: [VoteComponent],
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./board.component.scss']
 })
 export class BoardComponent {
