@@ -6,7 +6,7 @@
                     @if (session()?.photoURL) {
                         <img
                             class="img-fluid m-1 rounded text-center"
-                            [src]="$safeNavigationMigration(session()?.photoURL)"
+                            [src]="session()?.photoURL"
                             [alt]="session()?.displayName || 'UNKNOWN'"
                         />
                     }

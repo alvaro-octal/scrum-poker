@@ -3,7 +3,7 @@
         <tbody>
             @if (session()) {
                 <tr>
-                    <td class="table-light">
+                    <td class="table-light" style="background-color: transparent">
                         <app-user-horizontal
                             [user]="session()!"
                             [check]="!!round()?.votes?.[session()!.uid]"

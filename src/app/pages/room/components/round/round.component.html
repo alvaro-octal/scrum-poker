@@ -41,14 +41,8 @@
                         <div>
                             <ul>
                                 <li><span class="fw-bold">Votes</span>: {{ stats()?.count }}</li>
-                                <li>
-                                    <span class="fw-bold">AVG</span>:
-                                    {{ $safeNavigationMigration(stats()?.avg) | number: '1.0-1' }}
-                                </li>
-                                <li>
-                                    <span class="fw-bold">STD</span>:
-                                    {{ $safeNavigationMigration(stats()?.std) | number: '1.0-1' }}
-                                </li>
+                                <li><span class="fw-bold">AVG</span>: {{ stats()?.avg | number: '1.0-1' }}</li>
+                                <li><span class="fw-bold">STD</span>: {{ stats()?.std | number: '1.0-1' }}</li>
                             </ul>
                         </div>
                         <div class="d-flex align-items-center">
