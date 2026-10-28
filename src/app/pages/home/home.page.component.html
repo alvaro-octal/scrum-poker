@@ -13,9 +13,9 @@
                 </div>
                 <hr class="my-2" />
                 <div class="d-flex justify-content-between align-items-center">
-                    <button class="btn btn-primary" (click)="createRoom()">Create</button>
+                    <button class="btn-solid theme-primary" (click)="createRoom()">Create</button>
                     <span class="text-black-50">OR</span>
-                    <button class="btn btn-success" (click)="showJoin.set(true)">Join</button>
+                    <button class="btn-solid theme-success" (click)="showJoin.set(true)">Join</button>
                 </div>
                 @if (showJoin()) {
                     <div class="mt-2" [formGroup]="form" [class.shake]="invalidCode()">
